@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Physical Futures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void:        #020b14;
+      --cyan:        #00c8e8;
+      --cyan-bright: #a8f0ff;
+      --cyan-key:    #008ba3;   /* darker cyan for key bottom face */
+      --text:        rgba(168,240,255,0.8);
+      --text-dim:    rgba(168,240,255,0.28);
+      --mono:        'Share Tech Mono', monospace;
+      --display:     'Orbitron', sans-serif;
+    }
+
+    html { height: 100%; background: var(--void); }
+    body { height: 100%; }
+
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: var(--mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100svh;
+      overflow: hidden;
+      transition: opacity 0.65s ease;
+    }
+    body.fading { opacity: 0; }
+
+    /* ── ICE GLOW ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 100% 65% at 50% 10%, rgba(0,180,230,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 40% at 15% 85%, rgba(0,100,180,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 88% 60%, rgba(0,140,200,0.05) 0%, transparent 50%);
+    }
+
+    /* ── SCAN LINES ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.055) 3px, rgba(0,0,0,0.055) 4px
+      );
+    }
+
+    /* ── CORNER BRACKETS ── */
+    .corner {
+      position: fixed;
+      width: 32px; height: 32px;
+      opacity: 0.22;
+      z-index: 1;
+    }
+    .corner--tl { top:1.6rem; left:1.6rem; border-top:1px solid var(--cyan); border-left:1px solid var(--cyan); }
+    .corner--tr { top:1.6rem; right:1.6rem; border-top:1px solid var(--cyan); border-right:1px solid var(--cyan); }
+    .corner--bl { bottom:1.6rem; left:1.6rem; border-bottom:1px solid var(--cyan); border-left:1px solid var(--cyan); }
+    .corner--br { bottom:1.6rem; right:1.6rem; border-bottom:1px solid var(--cyan); border-right:1px solid var(--cyan); }
+
+    /* ── STAGE ── */
+    .stage {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 0;
+    }
+
+    /* ── BOOT META ── */
+    .boot-meta {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--text-dim);
+      margin-bottom: 2.8rem;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+    .boot-meta.show { opacity: 1; }
+
+    /* ── TITLE ── */
+    .title-block {
+      line-height: 0.88;
+      margin-bottom: 3.2rem;
+    }
+
+    .title-line {
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(3.2rem, 11vw, 9.5rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .title-line.t1 {
+      color: var(--cyan-bright);
+      text-shadow: 0 0 40px rgba(0,200,232,0.55), 0 0 80px rgba(0,200,232,0.18);
+    }
+    .title-line.t2 {
+      color: var(--cyan);
+      text-shadow: 0 0 30px rgba(0,200,232,0.45), 0 0 60px rgba(0,200,232,0.12);
+    }
+
+    /* typing cursor */
+    .typing::after {
+      content: '_';
+      color: var(--cyan);
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── KEYBOARD KEY BUTTON ── */
+    .key-wrap {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.8s, transform 0.8s;
+      margin-bottom: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .key-wrap.show { opacity: 1; transform: translateY(0); }
+
+    /* the cursor arrow beside the key */
+    .key-cursor {
+      font-size: 1.1rem;
+      color: var(--cyan);
+      opacity: 0.7;
+      animation: nudge 1.4s ease-in-out infinite;
+    }
+    @keyframes nudge {
+      0%,100% { transform: translateX(0); }
+      50%      { transform: translateX(4px); }
+    }
+
+    .key-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2.2rem;
+      background: var(--cyan);
+      color: var(--void);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      text-decoration: none;
+      /* the 3-D key face */
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.18),
+        0 6px 0 0 var(--cyan-key),
+        0 8px 14px rgba(0,0,0,0.45);
+      transform: translateY(0);
+      transition: box-shadow 0.07s ease, transform 0.07s ease;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .key-btn:active,
+    .key-btn.pressing {
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.18),
+        0 2px 0 0 var(--cyan-key),
+        0 3px 6px rgba(0,0,0,0.35);
+      transform: translateY(4px);
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      font-family: var(--mono);
+      font-size: clamp(0.82rem, 1.6vw, 1.0rem);
+      letter-spacing: 0.08em;
+      color: rgba(168,240,255,0.65);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .tagline.show { opacity: 1; transform: translateY(0); }
+
+    /* ── BRIDGE CANVAS ── */
+    #bridgeCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── STAMP ── */
+    .stamp {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(0,200,232,0.12);
+      white-space: nowrap;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bridgeCanvas"></canvas>
+
+  <div class="corner corner--tl"></div>
+  <div class="corner corner--tr"></div>
+  <div class="corner corner--bl"></div>
+  <div class="corner corner--br"></div>
+
+  <div class="stage">
+    <div class="boot-meta" id="bootMeta">
+      <span>SYS_INIT · 0x5046</span>
+      <span>NODE: SF-01</span>
+      <span>STATUS: ACTIVE</span>
+      <span>v.iii · APR 9</span>
+    </div>
+
+    <div class="title-block">
+      <span class="title-line t1" id="line1"></span>
+      <span class="title-line t2" id="line2"></span>
+    </div>
+
+    <div class="key-wrap" id="keyWrap">
+      <span class="key-cursor">▸</span>
+      <a class="key-btn" id="keyBtn" href="main.html">enter</a>
+    </div>
+
+    <p class="tagline" id="tagline">
+      the future ∈ artists + engineers ∈ materials ∈ physical body
+    </p>
+  </div>
+
+  <p class="stamp">PHYSICAL_FUTURES · SAN FRANCISCO · ARTGINEERING</p>
+
+  <script>
+    /* ── MYCELIUM + CIRCUIT BRIDGE ANIMATION ── */
+    (function() {
+      const canvas = document.getElementById('bridgeCanvas');
+      const ctx    = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', () => resize());
+
+      const W = () => canvas.width;
+      const H = () => canvas.height;
+
+      /* ── shared helpers ── */
+      const rand    = (a, b) => a + Math.random() * (b - a);
+      const randInt = (a, b) => Math.floor(rand(a, b));
+
+      const CYN = { r: 0, g: 200, b: 232 };   // --cyan #00c8e8
+
+      /*
+        Single meeting point: the centre of the viewport, which is
+        just behind where the ENTER button sits.
+        All roots and traces grow *toward* this point.
+      */
+      const meetingPt = () => ({ x: W() * 0.5, y: H() * 0.5 });
+
+      /* ─────────────────────────────────────────
+         MYCELIUM  (left side, fluid filaments)
+      ───────────────────────────────────────── */
+      const mycSegs = [];
+
+      function spawnMycBranch(x, y, angle, depth, towardCenter) {
+        if (depth <= 0) return;
+
+        const baseLen = rand(12, 55) * (depth / 7);
+        let useAngle  = angle;
+
+        if (towardCenter) {
+          const mp = meetingPt();
+          const ta = Math.atan2(mp.y - y, mp.x - x);
+          // strong pull on bridge strands, slight drift on others
+          const pull = towardCenter === 'strong' ? 0.78 : 0.35;
+          useAngle = angle * (1 - pull) + ta * pull;
+        }
+
+        // gentle organic wobble
+        const wobbleAmp = towardCenter ? rand(0.18, 0.42) : rand(0.06, 0.20);
+        useAngle += Math.sin(Date.now() * 0.003 + x * 0.01 + y * 0.01) * wobbleAmp * rand(0.6, 1.4);
+
+        const x2 = x + Math.cos(useAngle) * baseLen;
+        const y2 = y + Math.sin(useAngle) * baseLen;
+
+        // keep on canvas — no hard x clamp, let them overgrow
+        if (y2 < -H() * 0.1 || y2 > H() * 1.1) return;
+
+        const maxA = rand(0.28, 0.55) * (depth / 7);
+        const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false };
+        mycSegs.push(seg);
+
+        const delay = rand(120, 500);
+        setTimeout(() => {
+          const branches = randInt(1, depth > 4 ? 3 : 2);
+          for (let i = 0; i < branches; i++) {
+            const spread = rand(0.10, 0.50) * (Math.random() < 0.5 ? 1 : -1);
+            spawnMycBranch(x2, y2, useAngle + spread, depth - 1,
+              towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+          }
+        }, delay);
+      }
+
+      function seedMycelium() {
+        const origins = 18;
+        for (let i = 0; i < origins; i++) {
+          let sx, sy, angle, toward;
+          const roll = i % 4;
+          if (roll === 0) {
+            // left edge
+            sx = 0; sy = rand(0.0, 1.0) * H();
+            angle = rand(-0.5, 0.5);
+            toward = i < 8 ? 'strong' : 'weak';
+          } else if (roll === 1) {
+            // bottom edge
+            sx = rand(0.0, 1.0) * W(); sy = H();
+            angle = rand(-Math.PI * 0.85, -Math.PI * 0.15);
+            toward = 'weak';
+          } else if (roll === 2) {
+            // top edge
+            sx = rand(0.0, 1.0) * W(); sy = 0;
+            angle = rand(Math.PI * 0.15, Math.PI * 0.85);
+            toward = 'weak';
+          } else {
+            // right edge
+            sx = W(); sy = rand(0.0, 1.0) * H();
+            angle = rand(Math.PI * 0.7, Math.PI * 1.3);
+            toward = i < 12 ? 'strong' : 'weak';
+          }
+          setTimeout(() => spawnMycBranch(sx, sy, angle, 9, toward), i * 280);
+        }
+      }
+
+      /* ─────────────────────────────────────────
+         CIRCUIT TRACES  (right side, orthogonal)
+      ───────────────────────────────────────── */
+      const circSegs = [];
+
+      function spawnCircuit(x, y, angle, depth, towardCenter) {
+        if (depth <= 0) return;
+
+        let useAngle = Math.round(angle / (Math.PI / 4)) * (Math.PI / 4);
+
+        if (towardCenter) {
+          const mp = meetingPt();
+          const ta = Math.atan2(mp.y - y, mp.x - x);
+          const pull = towardCenter === 'strong' ? 0.78 : 0.35;
+          const twist = Math.sin(Date.now() * 0.003 + x * 0.01 + y * 0.01) * rand(0.18, 0.40);
+          useAngle = Math.round((angle * (1 - pull) + (ta + twist) * pull) / (Math.PI / 4)) * (Math.PI / 4);
+        }
+
+        const len  = rand(18, 80) * (depth / 6);
+        const x2   = x + Math.cos(useAngle) * len;
+        const y2   = y + Math.sin(useAngle) * len;
+
+        if (y2 < -H() * 0.1 || y2 > H() * 1.1) return;
+
+        const maxA = rand(0.28, 0.55) * (depth / 6);
+        const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false, dot: Math.random() < 0.3 };
+        circSegs.push(seg);
+
+        const delay = rand(120, 500);
+        setTimeout(() => {
+          const branches = randInt(1, depth > 3 ? 3 : 2);
+          for (let i = 0; i < branches; i++) {
+            const turn = (randInt(0, 3) - 1) * (Math.PI / 4);
+            spawnCircuit(x2, y2, useAngle + turn, depth - 1,
+              towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+          }
+        }, delay);
+      }
+
+      function seedCircuit() {
+        const origins = 18;
+        for (let i = 0; i < origins; i++) {
+          let sx, sy, angle, toward;
+          const roll = i % 4;
+          if (roll === 0) {
+            // right edge
+            sx = W(); sy = rand(0.0, 1.0) * H();
+            angle = rand(Math.PI * 0.70, Math.PI * 1.30);
+            toward = i < 8 ? 'strong' : 'weak';
+          } else if (roll === 1) {
+            // bottom edge
+            sx = rand(0.0, 1.0) * W(); sy = H();
+            angle = rand(-Math.PI * 0.65, -Math.PI * 0.25);
+            toward = 'weak';
+          } else if (roll === 2) {
+            // top edge
+            sx = rand(0.0, 1.0) * W(); sy = 0;
+            angle = rand(Math.PI * 0.25, Math.PI * 0.75);
+            toward = 'weak';
+          } else {
+            // left edge
+            sx = 0; sy = rand(0.0, 1.0) * H();
+            angle = rand(-0.5, 0.5);
+            toward = i < 12 ? 'strong' : 'weak';
+          }
+          setTimeout(() => spawnCircuit(sx, sy, angle, 8, toward), i * 290 + 140);
+        }
+      }
+
+      /* ─────────────────────────────────────────
+         CONTINUOUS GROWTH — never resets,
+         keeps spawning new branches forever so
+         the page overgrows if you stay long enough.
+      ───────────────────────────────────────── */
+      function microGrowth() {
+        // Occasional fresh edge sprouts to fill the canvas over time
+        const edgeRoll = Math.random();
+        if (edgeRoll < 0.22) {
+          const sy = rand(0.0, 1.0) * H();
+          spawnMycBranch(0, sy, rand(-0.5, 0.5), randInt(4, 7), Math.random() < 0.5 ? 'strong' : 'weak');
+        } else if (edgeRoll < 0.40) {
+          const sx = rand(0.0, 1.0) * W();
+          spawnMycBranch(sx, H(), rand(-Math.PI * 0.85, -Math.PI * 0.15), randInt(4, 7), 'weak');
+        } else if (edgeRoll < 0.55) {
+          const sy = rand(0.0, 1.0) * H();
+          spawnCircuit(W(), sy, rand(Math.PI * 0.7, Math.PI * 1.3), randInt(4, 7), Math.random() < 0.5 ? 'strong' : 'weak');
+        } else if (edgeRoll < 0.68) {
+          const sx = rand(0.0, 1.0) * W();
+          spawnCircuit(sx, 0, rand(Math.PI * 0.25, Math.PI * 0.75), randInt(4, 7), 'weak');
+        }
+
+        // Branch off existing finished tips
+        const doneMycSegs = mycSegs.filter(s => s.done);
+        if (doneMycSegs.length > 0) {
+          const parent    = doneMycSegs[randInt(0, doneMycSegs.length)];
+          const baseAngle = Math.atan2(parent.y2 - parent.y1, parent.x2 - parent.x1);
+          const spread    = rand(0.15, 0.75) * (Math.random() < 0.5 ? 1 : -1);
+          spawnMycBranch(parent.x2, parent.y2, baseAngle + spread, randInt(3, 6), Math.random() < 0.35 ? 'weak' : null);
+        }
+        const doneCircSegs = circSegs.filter(s => s.done);
+        if (doneCircSegs.length > 0) {
+          const parent    = doneCircSegs[randInt(0, doneCircSegs.length)];
+          const baseAngle = Math.atan2(parent.y2 - parent.y1, parent.x2 - parent.x1);
+          const turn      = (randInt(0, 3) - 1) * (Math.PI / 4);
+          spawnCircuit(parent.x2, parent.y2, baseAngle + turn, randInt(3, 6), Math.random() < 0.35 ? 'weak' : null);
+        }
+
+        // Prune only when very large to avoid memory issues — never reset visually
+        if (mycSegs.length  > 4000) mycSegs.splice(0, 400);
+        if (circSegs.length > 4000) circSegs.splice(0, 400);
+
+        setTimeout(microGrowth, rand(160, 550));
+      }
+
+      /* ── animation loop ── */
+      // Unified grow speed — roots and traces grow at the same rate
+      const GROW_SPEED = 0.018;
+      const FADE_IN    = 0.022;
+
+      function drawSeg(seg) {
+        const { r, g, b } = CYN;
+        if (seg.grow < 1) seg.grow = Math.min(1, seg.grow + GROW_SPEED);
+        else              seg.done = true;
+
+        if (seg.alpha < seg.maxAlpha) seg.alpha = Math.min(seg.maxAlpha, seg.alpha + FADE_IN);
+
+        const tx = seg.x1 + (seg.x2 - seg.x1) * seg.grow;
+        const ty = seg.y1 + (seg.y2 - seg.y1) * seg.grow;
+
+        // thin glow under-layer
+        ctx.beginPath();
+        ctx.moveTo(seg.x1, seg.y1);
+        ctx.lineTo(tx, ty);
+        ctx.strokeStyle = `rgba(${r},${g},${b},${seg.alpha * 0.22})`;
+        ctx.lineWidth   = 1.4;
+        ctx.stroke();
+
+        // ultra-thin bright core
+        ctx.beginPath();
+        ctx.moveTo(seg.x1, seg.y1);
+        ctx.lineTo(tx, ty);
+        ctx.strokeStyle = `rgba(${r},${g},${b},${seg.alpha})`;
+        ctx.lineWidth   = 0.55;
+        ctx.stroke();
+
+        // tiny junction dot for circuit segs
+        if (seg.dot && seg.done) {
+          ctx.beginPath();
+          ctx.arc(seg.x2, seg.y2, 1.4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r},${g},${b},${seg.alpha})`;
+          ctx.fill();
+        }
+      }
+
+      /* ── subtle glow at the central meeting point ── */
+      let centerGlow = 0;
+      function drawCenterGlow() {
+        const mp   = meetingPt();
+        const zone = W() * 0.18;
+        const near = [...mycSegs, ...circSegs].filter(s => {
+          if (!s.done) return false;
+          const dx = s.x2 - mp.x, dy = s.y2 - mp.y;
+          return Math.sqrt(dx*dx + dy*dy) < zone;
+        }).length;
+        if (near > 4) centerGlow = Math.min(1, centerGlow + 0.002);
+        if (centerGlow <= 0) return;
+
+        const { r, g, b } = CYN;
+        const g1 = ctx.createRadialGradient(mp.x, mp.y, 0, mp.x, mp.y, W() * 0.14);
+        g1.addColorStop(0, `rgba(${r},${g},${b},${0.09 * centerGlow})`);
+        g1.addColorStop(1, 'transparent');
+        ctx.fillStyle = g1;
+        ctx.fillRect(0, 0, W(), H());
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, W(), H());
+        drawCenterGlow();
+        for (const seg of mycSegs)  drawSeg(seg);
+        for (const seg of circSegs) drawSeg(seg);
+        requestAnimationFrame(loop);
+      }
+
+      /* start after a short delay so page load isn't jarring */
+      setTimeout(() => {
+        seedMycelium();
+        seedCircuit();
+        loop();
+        // kick off perpetual micro-growth immediately
+        setTimeout(microGrowth, 3000);
+      }, 600);
+    })();
+  </script>
+
+  <script>
+    const line1   = document.getElementById('line1');
+    const line2   = document.getElementById('line2');
+    const boot    = document.getElementById('bootMeta');
+    const keyWrap = document.getElementById('keyWrap');
+    const keyBtn  = document.getElementById('keyBtn');
+    const tagline = document.getElementById('tagline');
+
+    const type = (el, text, speed) => new Promise(resolve => {
+      let i = 0;
+      el.classList.add('typing');
+      const t = setInterval(() => {
+        el.textContent += text[i++];
+        if (i >= text.length) { clearInterval(t); el.classList.remove('typing'); resolve(); }
+      }, speed);
+    });
+
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+
+    async function run() {
+      await wait(300);
+      boot.classList.add('show');
+      await wait(750);
+      await type(line1, 'Physical', 82);
+      await wait(120);
+      await type(line2, 'Futures', 82);
+      await wait(350);
+      keyWrap.classList.add('show');
+      await wait(400);
+      tagline.classList.add('show');
+    }
+
+    run();
+
+    keyBtn.addEventListener('click', e => {
+      e.preventDefault();
+      keyBtn.classList.add('pressing');
+      setTimeout(() => {
+        document.body.classList.add('fading');
+        setTimeout(() => { window.location.href = 'main.html'; }, 650);
+      }, 160);
+    });
+  </script>
+
+</body>
+</html>

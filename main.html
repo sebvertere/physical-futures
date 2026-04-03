@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Physical Futures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --void:        #020b14;
+      --deep:        #061525;
+      --surface:     #091e30;
+      --border:      rgba(0,200,232,0.13);
+      --cyan:        #00c8e8;
+      --cyan-bright: #a8f0ff;
+      --cyan-key:    #008ba3;
+      --text:        rgba(168,240,255,0.82);
+      --text-dim:    rgba(168,240,255,0.32);
+      --mono:        'Share Tech Mono', monospace;
+      --display:     'Orbitron', sans-serif;
+    }
+
+    /* ── PAGE ── */
+    body {
+      background-color: var(--void);
+      /* subtle tiled triangle pattern */
+      background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='14,3 25,23 3,23' fill='none' stroke='rgba(0,200,232,0.055)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 28px 28px;
+      font-family: var(--mono);
+      font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+      line-height: 1.8;
+      color: var(--text);
+      opacity: 0;
+      animation: pageIn 0.9s ease 0.05s forwards;
+    }
+    @keyframes pageIn { to { opacity: 1; } }
+    ::selection { background: var(--cyan); color: var(--void); }
+
+    /* ── SCAN LINES ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+      );
+    }
+
+
+    /* ── CONTENT CARD ── */
+    .card {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--void);
+      padding: 3.5rem clamp(1.5rem, 5vw, 4rem) 5rem;
+      min-height: calc(100vh - 2rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.8rem;
+    }
+    .page-title {
+      font-family: var(--display);
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--cyan-bright);
+      text-shadow: 0 0 25px rgba(0,200,232,0.25);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .page-sub {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── FORM ── */
+    .form-section { margin-bottom: 0; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.6rem;
+    }
+
+    label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      opacity: 0.75;
+    }
+
+    input, select, textarea {
+      background: rgba(0,200,232,0.04);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+      border-radius: 0;
+      -webkit-appearance: none;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-bottom-color: var(--cyan);
+      background: rgba(0,200,232,0.07);
+    }
+    select { cursor: pointer; }
+    select option { background: var(--deep); color: var(--text); }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
+    input::placeholder, textarea::placeholder { color: var(--text-dim); }
+
+    /* keyboard-key submit button */
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2.2rem;
+      background: var(--cyan);
+      color: var(--void);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.18),
+        0 5px 0 0 var(--cyan-key),
+        0 7px 12px rgba(0,0,0,0.4);
+      transform: translateY(0);
+      transition: box-shadow 0.07s ease, transform 0.07s ease;
+    }
+    .btn-submit:active {
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.18),
+        0 2px 0 0 var(--cyan-key),
+        0 3px 5px rgba(0,0,0,0.3);
+      transform: translateY(3px);
+    }
+
+    .form-success {
+      display: none;
+      padding: 1.4rem;
+      border: 1px solid var(--border);
+      background: rgba(0,200,232,0.05);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      margin-top: 1rem;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin: 4rem 0 3.5rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── EVENT BLOCK ── */
+    .event-block {
+      margin-bottom: 5rem;
+    }
+
+    .event-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      opacity: 0.6;
+      margin-bottom: 0.6rem;
+    }
+
+    .event-title {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--cyan-bright);
+      text-shadow: 0 0 22px rgba(0,200,232,0.18);
+      line-height: 1.05;
+      margin-bottom: 2rem;
+    }
+
+    /* magazine-cover image placeholder */
+    .event-cover {
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 2 / 3;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* grid texture on placeholder */
+    .event-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,232,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,232,0.04) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .event-cover img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cover-placeholder-text {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(0,200,232,0.2);
+      position: relative;
+    }
+
+    .event-description {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      line-height: 1.85;
+      color: var(--text);
+      max-width: 58ch;
+      margin-bottom: 2rem;
+    }
+
+    /* presenters list */
+    .presenters-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      opacity: 0.55;
+      margin-bottom: 0.8rem;
+    }
+
+    .presenter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .presenter-list li {
+      border-bottom: 1px solid var(--border);
+    }
+    .presenter-list li:first-child { border-top: 1px solid var(--border); }
+
+    .presenter-list a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      transition: color 0.18s, padding-left 0.18s;
+    }
+    .presenter-list a:hover {
+      color: var(--cyan);
+      padding-left: 0.4rem;
+    }
+    .presenter-list a:hover .presenter-arrow { opacity: 1; }
+
+    .presenter-name { }
+
+    .presenter-role {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .presenter-arrow {
+      font-size: 0.7rem;
+      color: var(--cyan);
+      opacity: 0;
+      transition: opacity 0.18s;
+      margin-left: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ── MANIFESTO ── */
+    .manifesto-section {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-bottom: 4rem;
+    }
+
+    .manifesto-title {
+      font-family: var(--display);
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+      margin-bottom: 2rem;
+      text-shadow: 0 0 16px rgba(0,200,232,0.2);
+    }
+
+    .manifesto-body {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      line-height: 1.95;
+      color: var(--text);
+      max-width: 60ch;
+    }
+    .manifesto-body p + p { margin-top: 1.3em; }
+    .manifesto-body strong { color: var(--cyan-bright); font-weight: normal; }
+
+    .pillars {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .pillar {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+    .pillar:first-child { border-top: 1px solid var(--border); }
+    .pillar::before {
+      content: '>';
+      color: var(--cyan);
+      opacity: 0.5;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    /* upcoming placeholder cover — taller, dimmer */
+    .event-cover--placeholder {
+      background: rgba(0,200,232,0.03);
+      border-style: dashed;
+      border-color: rgba(0,200,232,0.18);
+    }
+    .event-cover--placeholder .cover-placeholder-text {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: rgba(0,200,232,0.35);
+    }
+
+    /* TBA presenters */
+    .presenter-list--tba {
+      border-top: 1px solid var(--border);
+    }
+    .presenter-list--tba li {
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+    }
+    .tba {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.18s;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    .back-link:hover { color: var(--cyan); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .event-cover { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+
+  <div class="card">
+
+    <!-- ── REGISTRY FORM ── -->
+    <section class="form-section">
+      <div class="page-header">
+        <p class="page-header-label">// Join the registry</p>
+        <h1 class="page-title">Physical Futures</h1>
+        <p class="page-sub">April 9 · San Francisco &nbsp;·&nbsp; Artists &amp; engineers working at the edge of the physical world</p>
+      </div>
+
+      <form id="applyForm" action="https://formspree.io/f/mykbynpv" method="POST">
+        <div class="field">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="you@domain.com" />
+        </div>
+        <div class="field">
+          <label for="socials">Where can we find you online?</label>
+          <textarea id="socials" name="socials" placeholder="Instagram: https://instagram.com/yourhandle&#10;LinkedIn: https://linkedin.com/in/you&#10;Portfolio / other: https://"></textarea>
+        </div>
+        <div class="field">
+          <label for="discipline">Primary Discipline *</label>
+          <select id="discipline" name="discipline" required>
+            <option value="" disabled selected>Select one</option>
+            <option>Fashion Design</option>
+            <option>Industrial / Product Design</option>
+            <option>Jewelry / Sculpture</option>
+            <option>Architecture / Furniture</option>
+            <option>Mechanical Engineering</option>
+            <option>Electrical / Optical Engineering</option>
+            <option>Neuroscience / Biosci</option>
+            <option>Materials Science / Chemistry</option>
+            <option>Robotics / Automation</option>
+            <option>Computational Design / Software</option>
+            <option>Research Scientist</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="project">What are you currently working on? *</label>
+          <textarea id="project" name="project" required placeholder="Tell us about your current project, object, or research — the weirder and more physical the better."></textarea>
+        </div>
+        <div class="field">
+          <label for="referral">Referred by (optional)</label>
+          <input type="text" id="referral" name="referral" placeholder="Who sent you?" />
+        </div>
+        <button type="submit" class="btn-submit">Join the registry →</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        > Received. We'll be in touch before the lineup drops.
+      </div>
+    </section>
+
+    <!-- ── ARCHIVE ── -->
+    <div class="section-divider">Archive</div>
+
+    <!-- ── v.iii: CEREBRAL (upcoming) ── -->
+    <div class="event-block">
+      <p class="event-label">Physical Futures v.iii · Upcoming</p>
+      <h2 class="event-title">Cerebral</h2>
+
+      <div class="event-cover" style="aspect-ratio: unset; height: auto;">
+        <img src="physfutures003%20(ninon).jpg" alt="Physical Futures v.iii: Cerebral" style="position: relative; height: auto; object-fit: unset;" />
+      </div>
+
+      <p class="event-description">
+        This Physical Futures will revolve around the mind, human head, brain, consciousness, and thought. The artist lineup includes fashion designers, architects, jewelers, sculptors, furniture designers, and industrial designers. The STEM lineup includes neuroscientists, biologists, various engineers (MechE, electrical, optical), material scientists, and computational designers.
+      </p>
+
+      <p class="presenters-label">Presenters</p>
+      <ul class="presenter-list presenter-list--tba">
+        <li><span class="tba">TBA</span></li>
+      </ul>
+    </div>
+
+    <!-- ── v.2: AUTOMECHANICA ── -->
+    <div class="event-block">
+      <p class="event-label">Physical Futures v.2</p>
+      <h2 class="event-title">Automechanica</h2>
+
+      <div class="event-cover">
+        <img src="pf-v2-cover.jpg" alt="Physical Futures v.2: Automechanica" />
+      </div>
+
+      <p class="event-description">
+        This physical futures featured a lineup of artists &amp; engineers interested in automatons, cybernetics, robotics, prosthetics, and automotives. The throughline was a focus on expanding, augmenting and redefining the human form; with many utilizing metal, carbon fiber, and resin in their works.
+      </p>
+
+      <p class="presenters-label">Presenters</p>
+      <ul class="presenter-list">
+        <!-- Replace href="#" with each presenter's social link -->
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+      </ul>
+    </div>
+
+    <!-- ── v.1: PHOTOREACTIVE ── -->
+    <div class="event-block">
+      <p class="event-label">Physical Futures · Kickoff</p>
+      <h2 class="event-title">Photoreactive</h2>
+
+      <div class="event-cover">
+        <img src="pf-v1-cover.jpg" alt="Physical Futures: Photoreactive (kickoff)" />
+      </div>
+
+      <p class="event-description">
+        The inaugural edition brought together fashion designers, jewelers, sculptors, and optical engineers for a night of demos around photoreactive and light-responsive materials. Small, intentionally curated, high-signal — with conversation that went long after the demos ended. The hypothesis was tested. It worked.
+      </p>
+
+      <p class="presenters-label">Presenters</p>
+      <ul class="presenter-list">
+        <!-- Replace href="#" with each presenter's social link -->
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Sebastián Vogelmann</span><span class="presenter-role">Materials Science</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Ninon Lizé Masclef</span><span class="presenter-role">MIT Media Lab</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Ben Iserman</span><span class="presenter-role">Host</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Liz &amp; Alex</span><span class="presenter-role">Hosts</span><span class="presenter-arrow">↗</span></a></li>
+      </ul>
+    </div>
+
+    <!-- ── MANIFESTO ── -->
+    <div class="section-divider" style="font-size:0.78rem; letter-spacing:0.28em; color: var(--cyan-bright); opacity:1;">The Manifesto</div>
+
+    <section class="manifesto-section">
+      <h2 class="manifesto-title">// OUR PREROGATIVE</h2>
+
+      <div class="manifesto-body">
+        <p><strong>𓏵 ARTGINEERING HAS RESULTED IN<br />SOME OF HUMANITY'S BEST WORK.</strong><br />IN AN AGE THAT OFTEN PRIORITIZES DIGITAL ARTIFACTS, IT'S IMPERATIVE PHYSICAL ARTISTS AND STEM DISCIPLES WORK EVEN MORE CLOSELY AS WE DESIGN FUTURE-FORWARD PHYSICAL OBJECTS THAT EXIST BETWEEN THE WORLDS OF ART, MANUFACTURING, FASHION, AND TECHNOLOGY.</p>
+        <p>WHEN THE ARTS COME UNDER ATTACK,<br />SCIENTIFIC PROGRESS WILL ALWAYS BE NEXT.</p>
+        <p>TO CENTER THE PHYSICAL HUMAN BODY FOR THIS NEW WORLD WE'RE ALL CREATING TOGETHER IS OUR SHARED PREROGATIVE.</p>
+        <p>⌬ ⌬ ⌬</p>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar">No startup pitches. No panels. Five-minute demos, then conversation.</div>
+        <div class="pillar">Curated over open. Every attendee is doing something genuinely strange and physical.</div>
+        <div class="pillar">Disciplines collide. Fashion meets optical engineering. Jewelry meets robotics.</div>
+        <div class="pillar">The physical human body is the through-line. Everything we make touches it.</div>
+      </div>
+    </section>
+
+    <a href="index.html" class="back-link">← Back to start</a>
+
+  </div><!-- /card -->
+
+  <script>
+    const form    = document.getElementById('applyForm');
+    const success = document.getElementById('formSuccess');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const res = await fetch(form.action, {
+        method: 'POST', body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) { form.style.display = 'none'; success.style.display = 'block'; }
+      else { alert('Something went wrong — please try again or email contact@sebastianvogelmann.com directly.'); }
+    });
+  </script>
+
+</body>
+</html>
