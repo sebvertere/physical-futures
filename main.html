@@ -28,9 +28,6 @@
     /* ── PAGE ── */
     body {
       background-color: var(--void);
-      /* subtle tiled triangle pattern */
-      background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='14,3 25,23 3,23' fill='none' stroke='rgba(0,200,232,0.055)' stroke-width='0.8'/%3E%3C/svg%3E");
-      background-size: 28px 28px;
       font-family: var(--mono);
       font-size: clamp(0.85rem, 1.1vw, 0.95rem);
       line-height: 1.8;
@@ -40,6 +37,96 @@
     }
     @keyframes pageIn { to { opacity: 1; } }
     ::selection { background: var(--cyan); color: var(--void); }
+
+
+    /* ── Remove background glow — light only passes through triangles ── */
+    body::before {
+      content: none;
+    }
+
+    /* ── Static dim triangle base layer ── */
+    .card::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='14,3 25,23 3,23' fill='none' stroke='rgba(0,200,232,0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 28px 28px;
+      /* Fade triangles to nothing at vertical center */
+      -webkit-mask-image: linear-gradient(to bottom,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,0.7) 20%,
+        rgba(0,0,0,0.3) 35%,
+        rgba(0,0,0,0) 50%,
+        rgba(0,0,0,0.3) 65%,
+        rgba(0,0,0,0.7) 80%,
+        rgba(0,0,0,1) 100%);
+      mask-image: linear-gradient(to bottom,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,0.7) 20%,
+        rgba(0,0,0,0.3) 35%,
+        rgba(0,0,0,0) 50%,
+        rgba(0,0,0,0.3) 65%,
+        rgba(0,0,0,0.7) 80%,
+        rgba(0,0,0,1) 100%);
+    }
+
+    /* ── Animated light-pulse triangle layers ──
+         Two vertical light bands sweep inward from left & right
+         edges toward the horizontal center */
+    .tri-pulse {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='14,3 25,23 3,23' fill='none' stroke='rgba(0,200,232,0.16)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 28px 28px;
+    }
+
+    /* Left band: starts at left edge, sweeps right toward center */
+    .tri-pulse--left {
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.4) 3%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.4) 15%, transparent 22%);
+      -webkit-mask-size: 200% 100%;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: 0% 0;
+      mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.4) 3%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.4) 15%, transparent 22%);
+      mask-size: 200% 100%;
+      mask-repeat: no-repeat;
+      mask-position: 0% 0;
+      animation: triPulseLeft 14s ease-in-out infinite;
+    }
+    @keyframes triPulseLeft {
+      0%   { -webkit-mask-position: 0% 0;    mask-position: 0% 0;    opacity: 0; }
+      8%   { opacity: 0.5; }
+      50%  { -webkit-mask-position: -55% 0;   mask-position: -55% 0;  opacity: 0.5; }
+      85%  { opacity: 0.12; }
+      100% { -webkit-mask-position: -100% 0;  mask-position: -100% 0; opacity: 0; }
+    }
+
+    /* Right band: starts at right edge, sweeps left toward center */
+    .tri-pulse--right {
+      -webkit-mask-image: linear-gradient(to left,
+        transparent 0%, rgba(0,0,0,0.4) 3%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.4) 15%, transparent 22%);
+      -webkit-mask-size: 200% 100%;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+      mask-image: linear-gradient(to left,
+        transparent 0%, rgba(0,0,0,0.4) 3%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.4) 15%, transparent 22%);
+      mask-size: 200% 100%;
+      mask-repeat: no-repeat;
+      mask-position: 100% 0;
+      animation: triPulseRight 14s ease-in-out infinite;
+    }
+    @keyframes triPulseRight {
+      0%   { -webkit-mask-position: 100% 0;   mask-position: 100% 0;   opacity: 0; }
+      8%   { opacity: 0.5; }
+      50%  { -webkit-mask-position: 155% 0;    mask-position: 155% 0;   opacity: 0.5; }
+      85%  { opacity: 0.12; }
+      100% { -webkit-mask-position: 200% 0;    mask-position: 200% 0;   opacity: 0; }
+    }
 
     /* ── SCAN LINES ── */
     body::after {
@@ -80,6 +167,7 @@
       text-transform: uppercase;
       color: var(--text-dim);
       margin-bottom: 0.8rem;
+      display: inline;
     }
     .page-title {
       font-family: var(--display);
@@ -122,7 +210,7 @@
       background: rgba(0,200,232,0.04);
       border: none;
       border-bottom: 1px solid var(--border);
-      padding: 0.75rem 0;
+      padding: 0.75rem 0.75rem;
       font-family: var(--mono);
       font-size: 0.9rem;
       color: var(--text);
@@ -140,6 +228,63 @@
     select option { background: var(--deep); color: var(--text); }
     textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
     input::placeholder, textarea::placeholder { color: var(--text-dim); }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 2.5rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 0;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 18s linear infinite;
+    }
+    .marquee-track span {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      white-space: nowrap;
+      padding-right: 4rem;
+    }
+    @keyframes marqueeScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── DISCIPLINE CHECKBOXES ── */
+    .discipline-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 0.2rem;
+    }
+    .discipline-grid label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      color: var(--text);
+      opacity: 1;
+      cursor: pointer;
+      transition: color 0.18s;
+    }
+    .discipline-grid label:hover { color: var(--cyan-bright); }
+    .discipline-grid input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      min-width: 14px;
+      accent-color: var(--cyan);
+      cursor: pointer;
+      padding: 0;
+    }
 
     /* keyboard-key submit button */
     .btn-submit {
@@ -216,6 +361,24 @@
       color: var(--cyan);
       opacity: 0.6;
       margin-bottom: 0.6rem;
+    }
+    .event-label .upcoming-text {
+      color: #f0b060;
+      animation: upcomingPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes upcomingPulse {
+      0%, 100% { opacity: 0.55; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── COVER FOOTNOTE ── */
+    .cover-footnote {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .event-title {
@@ -447,15 +610,26 @@
 </head>
 <body>
 
+  <!-- Two vertical light bands sweeping inward -->
+  <div class="tri-pulse tri-pulse--left"></div>
+  <div class="tri-pulse tri-pulse--right"></div>
 
   <div class="card">
 
     <!-- ── REGISTRY FORM ── -->
     <section class="form-section">
+      <div class="marquee-wrap" style="margin-bottom: 1.5rem;">
+        <div class="marquee-track">
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
+        </div>
+      </div>
+
       <div class="page-header">
-        <p class="page-header-label">// Join the registry</p>
         <h1 class="page-title">Physical Futures</h1>
-        <p class="page-sub">April 9 · San Francisco &nbsp;·&nbsp; Artists &amp; engineers working at the edge of the physical world</p>
+        <p class="page-sub"><span class="page-header-label" style="margin-bottom: 0;">// Join the registry</span> &nbsp;&middot;&nbsp; Bridging the gap between artists &amp; engineers</p>
       </div>
 
       <form id="applyForm" action="https://formspree.io/f/mykbynpv" method="POST">
@@ -472,26 +646,16 @@
           <textarea id="socials" name="socials" placeholder="Instagram: https://instagram.com/yourhandle&#10;LinkedIn: https://linkedin.com/in/you&#10;Portfolio / other: https://"></textarea>
         </div>
         <div class="field">
-          <label for="discipline">Primary Discipline *</label>
-          <select id="discipline" name="discipline" required>
-            <option value="" disabled selected>Select one</option>
-            <option>Fashion Design</option>
-            <option>Industrial / Product Design</option>
-            <option>Jewelry / Sculpture</option>
-            <option>Architecture / Furniture</option>
-            <option>Mechanical Engineering</option>
-            <option>Electrical / Optical Engineering</option>
-            <option>Neuroscience / Biosci</option>
-            <option>Materials Science / Chemistry</option>
-            <option>Robotics / Automation</option>
-            <option>Computational Design / Software</option>
-            <option>Research Scientist</option>
-            <option>Other</option>
-          </select>
+          <label for="discipline">Discipline(s) *</label>
+          <textarea id="discipline" name="discipline" required placeholder="e.g. Fashion Design, Industrial Design, Jewelry, Sculpture, Architecture, Furniture, Mechanical Engineering, Electrical Engineering, Optical Engineering, Neuroscience, Biosci, Materials Science, Chemistry, Robotics, Automation, Computational Design, Software, Research Scientist"></textarea>
         </div>
         <div class="field">
           <label for="project">What are you currently working on? *</label>
           <textarea id="project" name="project" required placeholder="Tell us about your current project, object, or research — the weirder and more physical the better."></textarea>
+        </div>
+        <div class="field">
+          <label for="seeking">What are you seeking from this community? *</label>
+          <textarea id="seeking" name="seeking" required placeholder="Collaborators, feedback on a project, access to tools, meeting kindred spirits..."></textarea>
         </div>
         <div class="field">
           <label for="referral">Referred by (optional)</label>
@@ -509,16 +673,18 @@
 
     <!-- ── v.iii: CEREBRAL (upcoming) ── -->
     <div class="event-block">
-      <p class="event-label">Physical Futures v.iii · Upcoming</p>
+      <p class="event-label">Physical Futures v.iii · <span class="upcoming-text">Upcoming</span></p>
       <h2 class="event-title">Cerebral</h2>
 
       <div class="event-cover" style="aspect-ratio: unset; height: auto;">
         <img src="physfutures003%20(ninon).jpg" alt="Physical Futures v.iii: Cerebral" style="position: relative; height: auto; object-fit: unset;" />
       </div>
+      <p class="cover-footnote">Featured cover futurist: <a href="https://ninonlizemasclef.com/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">Ninon Liz&eacute;-Masclef</a></p>
 
       <p class="event-description">
         This Physical Futures will revolve around the mind, human head, brain, consciousness, and thought. The artist lineup includes fashion designers, architects, jewelers, sculptors, furniture designers, and industrial designers. The STEM lineup includes neuroscientists, biologists, various engineers (MechE, electrical, optical), material scientists, and computational designers.
       </p>
+      <p class="event-description" style="font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(168,240,255,0.52); margin-top: -1.2rem;">SPONSOR: <a href="https://raven.computer/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">RAVEN RESONANCE</a></p>
 
       <p class="presenters-label">Presenters</p>
       <ul class="presenter-list presenter-list--tba">
@@ -534,19 +700,30 @@
       <div class="event-cover">
         <img src="pf-v2-cover.jpg" alt="Physical Futures v.2: Automechanica" />
       </div>
+      <p class="cover-footnote">Featured cover futurist: <a href="https://sebastianvogelmann.com/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">Sebasti&aacute;n Vogelmann</a></p>
 
       <p class="event-description">
         This physical futures featured a lineup of artists &amp; engineers interested in automatons, cybernetics, robotics, prosthetics, and automotives. The throughline was a focus on expanding, augmenting and redefining the human form; with many utilizing metal, carbon fiber, and resin in their works.
       </p>
+      <p class="event-description" style="font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(168,240,255,0.52); margin-top: -1.2rem;">SPONSOR: <a href="https://www.visititemfarm.com/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">ITEMFARM</a></p>
 
       <p class="presenters-label">Presenters</p>
       <ul class="presenter-list">
-        <!-- Replace href="#" with each presenter's social link -->
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Presenter Name</span><span class="presenter-role">Discipline</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.roooms.design/" target="_blank" rel="noopener"><span class="presenter-name">Ryan Salas</span><span class="presenter-role">The Almond Lamp</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://dariahajimiri.com/" target="_blank" rel="noopener"><span class="presenter-name">Daria Hajimiri</span><span class="presenter-role">The Wooden Corset</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://soundwork.shop/" target="_blank" rel="noopener"><span class="presenter-name">Chris Guichet</span><span class="presenter-role">PT2 Singing Synthesizer</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">The Orchard Microfactory</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://harrisonlin.com/" target="_blank" rel="noopener"><span class="presenter-name">Harrison Lin</span><span class="presenter-role">Rhythm Sunlight Generator</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://tomthecarrot.com/" target="_blank" rel="noopener"><span class="presenter-name">Tom Suarez</span><span class="presenter-role">Silicon Wafers</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Peacock Tian-Tsui, Gold Leaf Microbooks, Bioplastic</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.instagram.com/shierperry/" target="_blank" rel="noopener"><span class="presenter-name">Shier Perry</span><span class="presenter-role">Human-Led Futures, Mantaray Comb</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://daniellebaskin.com/" target="_blank" rel="noopener"><span class="presenter-name">Danielle Baskin</span><span class="presenter-role">Face Facemask</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.lizwanders.world/" target="_blank" rel="noopener"><span class="presenter-name">Liz Dorman</span><span class="presenter-role">The Puck</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.levibloch.com/" target="_blank" rel="noopener"><span class="presenter-name">Levi Bloch</span><span class="presenter-role">Industrial Sapphires, Fractography 101</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://lcassiano.com/" target="_blank" rel="noopener"><span class="presenter-name">Lucas Cassiano</span><span class="presenter-role">Carbon Fiber TPU &amp; Clay Robot Limbs</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">3D Prints For Blind Users, Interlocking TPU Fabric,INflatable tpu mechanisms</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.instagram.com/lance.v.moore?utm_source=ig_web_button_share_sheet&amp;igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener"><span class="presenter-name">Lance Victor Moore</span><span class="presenter-role">MetaMorphism Metal Masks, Blue Quartz Spikes</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">CompanionBot: Robotic Owl Familiar, Carbon Fiber Claws</span><span class="presenter-arrow">↗</span></a></li>
       </ul>
     </div>
 
@@ -560,16 +737,24 @@
       </div>
 
       <p class="event-description">
-        The inaugural edition brought together fashion designers, jewelers, sculptors, and optical engineers for a night of demos around photoreactive and light-responsive materials. Small, intentionally curated, high-signal — with conversation that went long after the demos ended. The hypothesis was tested. It worked.
+        Our inaugural salon revolving around photonics, optics, light and space brought together fashion designers, jewelers, lunar architects, and optical engineers for a night of demos around photoreactive and light-responsive materials.
       </p>
+      <p class="event-description" style="font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(168,240,255,0.52); margin-top: -1.2rem;">SPONSOR: <a href="https://www.era.computer/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">ERA LABS</a>, <a href="https://github.com/benjaminiserman" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">Ben Iserman</a></p>
 
       <p class="presenters-label">Presenters</p>
       <ul class="presenter-list">
-        <!-- Replace href="#" with each presenter's social link -->
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Sebastián Vogelmann</span><span class="presenter-role">Materials Science</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Ninon Lizé Masclef</span><span class="presenter-role">MIT Media Lab</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Ben Iserman</span><span class="presenter-role">Host</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="#" target="_blank" rel="noopener"><span class="presenter-name">Liz &amp; Alex</span><span class="presenter-role">Hosts</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.eggney.com/" target="_blank" rel="noopener"><span class="presenter-name">Sydney Parcell</span><span class="presenter-role">Kalediocube, Moiré Inference Bodysuit</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/taylor-waddell/" target="_blank" rel="noopener"><span class="presenter-name">Taylor Waddell</span><span class="presenter-role">Computed Axial Lithography (CAL) 3D Printing, Zero-Gravity 3D Prints</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://aprosina.com/" target="_blank" rel="noopener"><span class="presenter-name">Anastasia Prosina</span><span class="presenter-role">Space Hug: Astronaut Sleeping Bags, Space Architecture</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://wadeful.net/" target="_blank" rel="noopener"><span class="presenter-name">Norm O'Hagan</span><span class="presenter-role">Cadence: E-ink watch, Paragonday</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">DuoMorph: Inflatable 3D printing, Sensora: Audio-Haptic Orbs</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://antimatter15.com/" target="_blank" rel="noopener"><span class="presenter-name">Kevin Kwok</span><span class="presenter-role">KwokTech</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Fish leather, LED guitar pick</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://x.com/syntacticspice" target="_blank" rel="noopener"><span class="presenter-name">Anna Brewer</span><span class="presenter-role">Familiar</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">Bottle-based Translucent 3D Printing Filament</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">Covert PCB Earrings, Ghost: Retroreflective Dress</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://tomthecarrot.com/" target="_blank" rel="noopener"><span class="presenter-name">Tom Suarez</span><span class="presenter-role">Waveguide Optic Lenses</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.lizwanders.world/" target="_blank" rel="noopener"><span class="presenter-name">Liz Dorman</span><span class="presenter-role">Past &amp; Future Devices</span><span class="presenter-arrow">↗</span></a></li>
       </ul>
     </div>
 
@@ -580,7 +765,7 @@
       <h2 class="manifesto-title">// OUR PREROGATIVE</h2>
 
       <div class="manifesto-body">
-        <p><strong>𓏵 ARTGINEERING HAS RESULTED IN<br />SOME OF HUMANITY'S BEST WORK.</strong><br />IN AN AGE THAT OFTEN PRIORITIZES DIGITAL ARTIFACTS, IT'S IMPERATIVE PHYSICAL ARTISTS AND STEM DISCIPLES WORK EVEN MORE CLOSELY AS WE DESIGN FUTURE-FORWARD PHYSICAL OBJECTS THAT EXIST BETWEEN THE WORLDS OF ART, MANUFACTURING, FASHION, AND TECHNOLOGY.</p>
+        <p style="margin-bottom: 0.6em;"><strong>𓏵 ARTGINEERING HAS RESULTED IN<br />SOME OF HUMANITY'S BEST WORK.</strong><br />IN AN AGE THAT OFTEN PRIORITIZES DIGITAL ARTIFACTS, IT'S IMPERATIVE PHYSICAL ARTISTS AND STEM DISCIPLES WORK EVEN MORE CLOSELY AS WE DESIGN FUTURE-FORWARD PHYSICAL OBJECTS THAT EXIST BETWEEN THE WORLDS OF ART, MANUFACTURING, FASHION, AND TECHNOLOGY.</p>
         <p>WHEN THE ARTS COME UNDER ATTACK,<br />SCIENTIFIC PROGRESS WILL ALWAYS BE NEXT.</p>
         <p>TO CENTER THE PHYSICAL HUMAN BODY FOR THIS NEW WORLD WE'RE ALL CREATING TOGETHER IS OUR SHARED PREROGATIVE.</p>
         <p>⌬ ⌬ ⌬</p>
@@ -588,6 +773,7 @@
 
       <div class="pillars">
         <div class="pillar">No startup pitches. No panels. Five-minute demos, then conversation.</div>
+        <div class="pillar">Our community is interdisciplinary, and intergenerational. All generations are welcome here.</div>
         <div class="pillar">Curated over open. Every attendee is doing something genuinely strange and physical.</div>
         <div class="pillar">Disciplines collide. Fashion meets optical engineering. Jewelry meets robotics.</div>
         <div class="pillar">The physical human body is the through-line. Everything we make touches it.</div>
