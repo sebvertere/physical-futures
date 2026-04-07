@@ -316,12 +316,12 @@
           const mp = meetingPt();
           const ta = Math.atan2(mp.y - y, mp.x - x);
           // strong pull on bridge strands, slight drift on others
-          const pull = towardCenter === 'strong' ? 0.78 : 0.35;
+          const pull = towardCenter === 'strong' ? 0.60 : 0.25;
           useAngle = angle * (1 - pull) + ta * pull;
         }
 
         // gentle organic wobble
-        const wobbleAmp = towardCenter ? rand(0.18, 0.42) : rand(0.06, 0.20);
+        const wobbleAmp = towardCenter ? rand(0.25, 0.55) : rand(0.12, 0.35);
         useAngle += Math.sin(Date.now() * 0.003 + x * 0.01 + y * 0.01) * wobbleAmp * rand(0.6, 1.4);
 
         const x2 = x + Math.cos(useAngle) * baseLen;
@@ -334,13 +334,16 @@
         const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false };
         mycSegs.push(seg);
 
-        const delay = rand(120, 500);
+        const delay = rand(140, 620);
         setTimeout(() => {
           const branches = randInt(1, depth > 4 ? 3 : 2);
           for (let i = 0; i < branches; i++) {
-            const spread = rand(0.10, 0.50) * (Math.random() < 0.5 ? 1 : -1);
-            spawnMycBranch(x2, y2, useAngle + spread, depth - 1,
-              towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+            const spread = rand(0.25, 0.85) * (Math.random() < 0.5 ? 1 : -1);
+            // Stagger each sub-branch with its own small delay
+            setTimeout(() => {
+              spawnMycBranch(x2, y2, useAngle + spread, depth - 1,
+                towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+            }, i * rand(60, 200));
           }
         }, delay);
       }
@@ -371,7 +374,32 @@
             angle = rand(Math.PI * 0.7, Math.PI * 1.3);
             toward = i < 12 ? 'strong' : 'weak';
           }
-          setTimeout(() => spawnMycBranch(sx, sy, angle, 9, toward), i * 280);
+          // Stagger initial seeds with increasing randomised delays
+          const baseDelay = i * 320;
+          const jitter    = rand(0, 280);
+          setTimeout(() => spawnMycBranch(sx, sy, angle, 9, toward), baseDelay + jitter);
+        }
+        // Extra small edge sprouts — short, subtle filaments along all edges
+        const smallOrigins = 24;
+        for (let i = 0; i < smallOrigins; i++) {
+          let sx, sy, angle;
+          const edge = i % 4;
+          if (edge === 0) {
+            sx = 0; sy = rand(0.05, 0.95) * H();
+            angle = rand(-0.35, 0.35);
+          } else if (edge === 1) {
+            sx = rand(0.05, 0.95) * W(); sy = H();
+            angle = rand(-Math.PI * 0.75, -Math.PI * 0.25);
+          } else if (edge === 2) {
+            sx = rand(0.05, 0.95) * W(); sy = 0;
+            angle = rand(Math.PI * 0.25, Math.PI * 0.75);
+          } else {
+            sx = W(); sy = rand(0.05, 0.95) * H();
+            angle = rand(Math.PI * 0.8, Math.PI * 1.2);
+          }
+          const smallDelay = rand(200, 3500);
+          const depth = randInt(2, 4);
+          setTimeout(() => spawnMycBranch(sx, sy, angle, depth, null), smallDelay);
         }
       }
 
@@ -403,13 +431,16 @@
         const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false, dot: Math.random() < 0.3 };
         circSegs.push(seg);
 
-        const delay = rand(120, 500);
+        const delay = rand(140, 620);
         setTimeout(() => {
           const branches = randInt(1, depth > 3 ? 3 : 2);
           for (let i = 0; i < branches; i++) {
             const turn = (randInt(0, 3) - 1) * (Math.PI / 4);
-            spawnCircuit(x2, y2, useAngle + turn, depth - 1,
-              towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+            // Stagger each sub-branch with its own small delay
+            setTimeout(() => {
+              spawnCircuit(x2, y2, useAngle + turn, depth - 1,
+                towardCenter && depth > 2 ? towardCenter : (Math.random() < 0.25 ? 'weak' : null));
+            }, i * rand(60, 200));
           }
         }, delay);
       }
@@ -440,7 +471,32 @@
             angle = rand(-0.5, 0.5);
             toward = i < 12 ? 'strong' : 'weak';
           }
-          setTimeout(() => spawnCircuit(sx, sy, angle, 8, toward), i * 290 + 140);
+          // Stagger circuit seeds with increasing randomised delays
+          const baseDelay = i * 340 + 140;
+          const jitter    = rand(0, 320);
+          setTimeout(() => spawnCircuit(sx, sy, angle, 8, toward), baseDelay + jitter);
+        }
+        // Extra small edge sprouts — short circuit stubs along all edges
+        const smallOrigins = 24;
+        for (let i = 0; i < smallOrigins; i++) {
+          let sx, sy, angle;
+          const edge = i % 4;
+          if (edge === 0) {
+            sx = W(); sy = rand(0.05, 0.95) * H();
+            angle = rand(Math.PI * 0.8, Math.PI * 1.2);
+          } else if (edge === 1) {
+            sx = rand(0.05, 0.95) * W(); sy = H();
+            angle = rand(-Math.PI * 0.65, -Math.PI * 0.35);
+          } else if (edge === 2) {
+            sx = rand(0.05, 0.95) * W(); sy = 0;
+            angle = rand(Math.PI * 0.35, Math.PI * 0.65);
+          } else {
+            sx = 0; sy = rand(0.05, 0.95) * H();
+            angle = rand(-0.3, 0.3);
+          }
+          const smallDelay = rand(300, 3800);
+          const depth = randInt(2, 4);
+          setTimeout(() => spawnCircuit(sx, sy, angle, depth, null), smallDelay);
         }
       }
 
@@ -448,83 +504,246 @@
          CONTINUOUS GROWTH — never resets,
          keeps spawning new branches forever so
          the page overgrows if you stay long enough.
+
+         Staggered: main growth plays out first,
+         then smaller subtle sprouts keep appearing
+         mostly near the far edges of the screen.
       ───────────────────────────────────────── */
+
+      /* Helper: bias a 0-1 value toward screen edges */
+      function edgeBias(t) {
+        // push values toward 0 or 1 (far edges)
+        return t < 0.5
+          ? t * t * 2            // compress toward 0
+          : 1 - (1 - t) * (1 - t) * 2; // compress toward 1
+      }
+
+      /* Helper: distance from center as 0-1 (0 = center, 1 = corner) */
+      function edgeness(x, y) {
+        const cx = Math.abs(x / W() - 0.5) * 2; // 0 at center, 1 at edge
+        const cy = Math.abs(y / H() - 0.5) * 2;
+        return Math.max(cx, cy);
+      }
+
       function microGrowth() {
-        // Occasional fresh edge sprouts to fill the canvas over time
+        // Smaller depth for micro-growths — subtler than initial burst
+        const microDepth = randInt(2, 5);
+
+        // Fresh edge sprouts — biased toward far edges
         const edgeRoll = Math.random();
         if (edgeRoll < 0.22) {
-          const sy = rand(0.0, 1.0) * H();
-          spawnMycBranch(0, sy, rand(-0.5, 0.5), randInt(4, 7), Math.random() < 0.5 ? 'strong' : 'weak');
-        } else if (edgeRoll < 0.40) {
-          const sx = rand(0.0, 1.0) * W();
-          spawnMycBranch(sx, H(), rand(-Math.PI * 0.85, -Math.PI * 0.15), randInt(4, 7), 'weak');
-        } else if (edgeRoll < 0.55) {
-          const sy = rand(0.0, 1.0) * H();
-          spawnCircuit(W(), sy, rand(Math.PI * 0.7, Math.PI * 1.3), randInt(4, 7), Math.random() < 0.5 ? 'strong' : 'weak');
+          // left edge — bias y toward top/bottom corners
+          const sy = edgeBias(Math.random()) * H();
+          spawnMycBranch(0, sy, rand(-0.4, 0.4), microDepth, 'weak');
+        } else if (edgeRoll < 0.38) {
+          // bottom edge — bias x toward left/right corners
+          const sx = edgeBias(Math.random()) * W();
+          spawnMycBranch(sx, H(), rand(-Math.PI * 0.8, -Math.PI * 0.2), microDepth, 'weak');
+        } else if (edgeRoll < 0.54) {
+          // right edge — bias y toward top/bottom corners
+          const sy = edgeBias(Math.random()) * H();
+          spawnCircuit(W(), sy, rand(Math.PI * 0.75, Math.PI * 1.25), microDepth, 'weak');
         } else if (edgeRoll < 0.68) {
-          const sx = rand(0.0, 1.0) * W();
-          spawnCircuit(sx, 0, rand(Math.PI * 0.25, Math.PI * 0.75), randInt(4, 7), 'weak');
+          // top edge — bias x toward left/right corners
+          const sx = edgeBias(Math.random()) * W();
+          spawnCircuit(sx, 0, rand(Math.PI * 0.3, Math.PI * 0.7), microDepth, 'weak');
+        }
+        // else: ~32% chance of no new edge sprout
+
+        // Additional tiny edge whiskers — very short, depth 1-3
+        if (Math.random() < 0.55) {
+          const tinyDepth = randInt(1, 3);
+          const whichEdge = randInt(0, 4);
+          let wx, wy, wa;
+          if (whichEdge === 0) { wx = 0; wy = rand(0, 1) * H(); wa = rand(-0.3, 0.3); }
+          else if (whichEdge === 1) { wx = W(); wy = rand(0, 1) * H(); wa = rand(Math.PI * 0.85, Math.PI * 1.15); }
+          else if (whichEdge === 2) { wx = rand(0, 1) * W(); wy = 0; wa = rand(Math.PI * 0.3, Math.PI * 0.7); }
+          else { wx = rand(0, 1) * W(); wy = H(); wa = rand(-Math.PI * 0.7, -Math.PI * 0.3); }
+          const useMyc = Math.random() < 0.5;
+          if (useMyc) spawnMycBranch(wx, wy, wa, tinyDepth, null);
+          else spawnCircuit(wx, wy, wa, tinyDepth, null);
         }
 
-        // Branch off existing finished tips
+        // Branch off existing finished tips, preferring those near edges
         const doneMycSegs = mycSegs.filter(s => s.done);
-        if (doneMycSegs.length > 0) {
-          const parent    = doneMycSegs[randInt(0, doneMycSegs.length)];
+        if (doneMycSegs.length > 0 && Math.random() < 0.6) {
+          // Weight selection toward edge segments
+          const edgeWeighted = doneMycSegs.sort((a, b) => edgeness(b.x2, b.y2) - edgeness(a.x2, a.y2));
+          // pick from the edgier half most of the time
+          const pickPool = Math.random() < 0.75
+            ? Math.floor(edgeWeighted.length * 0.35)
+            : edgeWeighted.length;
+          const parent    = edgeWeighted[randInt(0, Math.max(1, pickPool))];
           const baseAngle = Math.atan2(parent.y2 - parent.y1, parent.x2 - parent.x1);
-          const spread    = rand(0.15, 0.75) * (Math.random() < 0.5 ? 1 : -1);
-          spawnMycBranch(parent.x2, parent.y2, baseAngle + spread, randInt(3, 6), Math.random() < 0.35 ? 'weak' : null);
+          const spread    = rand(0.30, 0.95) * (Math.random() < 0.5 ? 1 : -1);
+          spawnMycBranch(parent.x2, parent.y2, baseAngle + spread, randInt(2, 4), null);
         }
         const doneCircSegs = circSegs.filter(s => s.done);
-        if (doneCircSegs.length > 0) {
-          const parent    = doneCircSegs[randInt(0, doneCircSegs.length)];
+        if (doneCircSegs.length > 0 && Math.random() < 0.6) {
+          const edgeWeighted = doneCircSegs.sort((a, b) => edgeness(b.x2, b.y2) - edgeness(a.x2, a.y2));
+          const pickPool = Math.random() < 0.75
+            ? Math.floor(edgeWeighted.length * 0.35)
+            : edgeWeighted.length;
+          const parent    = edgeWeighted[randInt(0, Math.max(1, pickPool))];
           const baseAngle = Math.atan2(parent.y2 - parent.y1, parent.x2 - parent.x1);
           const turn      = (randInt(0, 3) - 1) * (Math.PI / 4);
-          spawnCircuit(parent.x2, parent.y2, baseAngle + turn, randInt(3, 6), Math.random() < 0.35 ? 'weak' : null);
+          spawnCircuit(parent.x2, parent.y2, baseAngle + turn, randInt(2, 4), null);
         }
 
         // Prune only when very large to avoid memory issues — never reset visually
         if (mycSegs.length  > 4000) mycSegs.splice(0, 400);
         if (circSegs.length > 4000) circSegs.splice(0, 400);
 
-        setTimeout(microGrowth, rand(160, 550));
+        // Stagger timing: shorter pauses for denser edge growth
+        setTimeout(microGrowth, rand(250, 800));
+      }
+
+      /* ─────────────────────────────────────────
+         CREEPER TENDRILS — prominent strands that
+         periodically reach inward toward center.
+         Noticeable but subtle: slightly brighter,
+         thicker, with strong center-pull.
+      ───────────────────────────────────────── */
+      const creeperSegs = [];
+
+      function spawnCreeper(x, y, angle, depth) {
+        if (depth <= 0) return;
+
+        const mp = meetingPt();
+        const ta = Math.atan2(mp.y - y, mp.x - x);
+        // Very strong pull toward center with gentle wobble
+        const pull = 0.72;
+        const wobble = Math.sin(Date.now() * 0.002 + x * 0.02 + y * 0.02) * rand(0.10, 0.25);
+        const useAngle = angle * (1 - pull) + (ta + wobble) * pull;
+
+        const baseLen = rand(25, 70) * (depth / 6);
+        const x2 = x + Math.cos(useAngle) * baseLen;
+        const y2 = y + Math.sin(useAngle) * baseLen;
+
+        if (y2 < -H() * 0.05 || y2 > H() * 1.05) return;
+
+        // Brighter max alpha than normal segments
+        const maxA = rand(0.45, 0.72) * (depth / 6);
+        const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false, creeper: true };
+        creeperSegs.push(seg);
+
+        // Slightly longer delays for a creeping feel
+        const delay = rand(180, 500);
+        setTimeout(() => {
+          // Usually just 1 branch continuing forward, occasionally 2
+          const branches = Math.random() < 0.35 ? 2 : 1;
+          for (let i = 0; i < branches; i++) {
+            const spread = rand(0.10, 0.40) * (Math.random() < 0.5 ? 1 : -1);
+            setTimeout(() => {
+              spawnCreeper(x2, y2, useAngle + spread, depth - 1);
+            }, i * rand(80, 250));
+          }
+        }, delay);
+      }
+
+      function launchCreeper() {
+        // Pick a random edge, biased toward mid-sections (not corners)
+        const edge = randInt(0, 4);
+        let sx, sy, angle;
+        const midBias = 0.25 + Math.random() * 0.5; // 0.25–0.75 range
+        if (edge === 0) {
+          // left
+          sx = 0; sy = midBias * H();
+          angle = rand(-0.3, 0.3);
+        } else if (edge === 1) {
+          // right
+          sx = W(); sy = midBias * H();
+          angle = rand(Math.PI * 0.85, Math.PI * 1.15);
+        } else if (edge === 2) {
+          // top
+          sx = midBias * W(); sy = 0;
+          angle = rand(Math.PI * 0.35, Math.PI * 0.65);
+        } else {
+          // bottom
+          sx = midBias * W(); sy = H();
+          angle = rand(-Math.PI * 0.65, -Math.PI * 0.35);
+        }
+
+        // Deeper than micro-growths so they reach further inward
+        const depth = randInt(5, 8);
+        // Alternate between organic and circuit style
+        if (Math.random() < 0.5) {
+          spawnCreeper(sx, sy, angle, depth);
+        } else {
+          spawnCreeper(sx, sy, angle, depth);
+        }
+
+        // Prune old creeper segs if they pile up
+        if (creeperSegs.length > 800) creeperSegs.splice(0, 150);
+
+        // Next creeper in 4–9 seconds — infrequent but noticeable
+        setTimeout(launchCreeper, rand(4000, 9000));
       }
 
       /* ── animation loop ── */
-      // Unified grow speed — roots and traces grow at the same rate
-      const GROW_SPEED = 0.018;
-      const FADE_IN    = 0.022;
+      // Base grow speed — each segment gets its own slight variation for stagger
+      const GROW_SPEED_BASE = 0.018;
+      const FADE_IN_BASE    = 0.022;
+
+      // Creeper segments grow a bit slower for a deliberate creeping motion
+      const CREEPER_GROW_BASE = 0.012;
+      const CREEPER_FADE_BASE = 0.018;
 
       function drawSeg(seg) {
         const { r, g, b } = CYN;
-        if (seg.grow < 1) seg.grow = Math.min(1, seg.grow + GROW_SPEED);
+        const isCreeper = seg.creeper;
+
+        // Per-segment speed variation (computed once, cached)
+        if (seg._spd === undefined) {
+          seg._spd = isCreeper
+            ? CREEPER_GROW_BASE * (0.7 + Math.random() * 0.6)
+            : GROW_SPEED_BASE * (0.6 + Math.random() * 0.8);
+        }
+        if (seg._fin === undefined) {
+          seg._fin = isCreeper
+            ? CREEPER_FADE_BASE * (0.7 + Math.random() * 0.6)
+            : FADE_IN_BASE * (0.7 + Math.random() * 0.6);
+        }
+
+        if (seg.grow < 1) seg.grow = Math.min(1, seg.grow + seg._spd);
         else              seg.done = true;
 
-        if (seg.alpha < seg.maxAlpha) seg.alpha = Math.min(seg.maxAlpha, seg.alpha + FADE_IN);
+        if (seg.alpha < seg.maxAlpha) seg.alpha = Math.min(seg.maxAlpha, seg.alpha + seg._fin);
 
         const tx = seg.x1 + (seg.x2 - seg.x1) * seg.grow;
         const ty = seg.y1 + (seg.y2 - seg.y1) * seg.grow;
+
+        // Creeper segments are slightly brighter with a wider glow
+        const glowWidth = isCreeper ? 2.2 : 1.4;
+        const coreWidth = isCreeper ? 0.75 : 0.55;
+        const glowMult  = isCreeper ? 0.32 : 0.22;
+
+        // Use slightly shifted color for creepers — a touch brighter/whiter
+        const dr = isCreeper ? Math.min(255, r + 40) : r;
+        const dg = isCreeper ? Math.min(255, g + 25) : g;
+        const db = isCreeper ? Math.min(255, b + 15) : b;
 
         // thin glow under-layer
         ctx.beginPath();
         ctx.moveTo(seg.x1, seg.y1);
         ctx.lineTo(tx, ty);
-        ctx.strokeStyle = `rgba(${r},${g},${b},${seg.alpha * 0.22})`;
-        ctx.lineWidth   = 1.4;
+        ctx.strokeStyle = `rgba(${dr},${dg},${db},${seg.alpha * glowMult})`;
+        ctx.lineWidth   = glowWidth;
         ctx.stroke();
 
         // ultra-thin bright core
         ctx.beginPath();
         ctx.moveTo(seg.x1, seg.y1);
         ctx.lineTo(tx, ty);
-        ctx.strokeStyle = `rgba(${r},${g},${b},${seg.alpha})`;
-        ctx.lineWidth   = 0.55;
+        ctx.strokeStyle = `rgba(${dr},${dg},${db},${seg.alpha})`;
+        ctx.lineWidth   = coreWidth;
         ctx.stroke();
 
         // tiny junction dot for circuit segs
         if (seg.dot && seg.done) {
           ctx.beginPath();
           ctx.arc(seg.x2, seg.y2, 1.4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r},${g},${b},${seg.alpha})`;
+          ctx.fillStyle = `rgba(${dr},${dg},${db},${seg.alpha})`;
           ctx.fill();
         }
       }
@@ -553,8 +772,9 @@
       function loop() {
         ctx.clearRect(0, 0, W(), H());
         drawCenterGlow();
-        for (const seg of mycSegs)  drawSeg(seg);
-        for (const seg of circSegs) drawSeg(seg);
+        for (const seg of mycSegs)    drawSeg(seg);
+        for (const seg of circSegs)   drawSeg(seg);
+        for (const seg of creeperSegs) drawSeg(seg);
         requestAnimationFrame(loop);
       }
 
@@ -563,8 +783,10 @@
         seedMycelium();
         seedCircuit();
         loop();
-        // kick off perpetual micro-growth immediately
-        setTimeout(microGrowth, 3000);
+        // kick off perpetual micro-growth sooner for denser edge coverage
+        setTimeout(microGrowth, 2500);
+        // first creeper tendril after initial growth settles
+        setTimeout(launchCreeper, 5000);
       }, 600);
     })();
   </script>
