@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Join Physical Futures</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23020b14'/%3E%3Cpath d='M11 6 L5 6 L5 26 L11 26' fill='none' stroke='%2300c8e8' stroke-width='2' stroke-linecap='square'/%3E%3Cpath d='M21 6 L27 6 L27 26 L21 26' fill='none' stroke='%2300c8e8' stroke-width='2' stroke-linecap='square'/%3E%3Cpolygon points='16,10 20.5,12.5 20.5,17.5 16,20 11.5,17.5 11.5,12.5' fill='none' stroke='%2300c8e8' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
@@ -23,6 +24,14 @@
       --text-dim:    rgba(168,240,255,0.32);
       --mono:        'Share Tech Mono', monospace;
       --display:     'Orbitron', sans-serif;
+    }
+
+    /* ── CUSTOM BRACKET CURSOR ── */
+    html, body, * {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M12 6 L6 6 L6 26 L12 26' fill='none' stroke='%2300c8e8' stroke-width='1.5' stroke-linecap='square'/%3E%3Cpath d='M20 6 L26 6 L26 26 L20 26' fill='none' stroke='%2300c8e8' stroke-width='1.5' stroke-linecap='square'/%3E%3C/svg%3E") 16 16, crosshair !important;
+    }
+    html.cursor-active, html.cursor-active *, html.cursor-active *::before, html.cursor-active *::after {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M12 6 L6 6 L6 26 L12 26' fill='none' stroke='%2300c8e8' stroke-width='1.5' stroke-linecap='square'/%3E%3Cpath d='M20 6 L26 6 L26 26 L20 26' fill='none' stroke='%2300c8e8' stroke-width='1.5' stroke-linecap='square'/%3E%3Cpolygon points='16,12 19.5,14 19.5,18 16,20 12.5,18 12.5,14' fill='none' stroke='%2300c8e8' stroke-width='1.4' stroke-linejoin='round' opacity='0.95'/%3E%3C/svg%3E") 16 16, crosshair !important;
     }
 
     /* ── PAGE ── */
@@ -156,8 +165,8 @@
 
     /* ── PAGE HEADER ── */
     .page-header {
-      margin-bottom: 3rem;
-      padding-bottom: 2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
     }
     .page-header-label {
@@ -602,6 +611,114 @@
     }
     .back-link:hover { color: var(--cyan); }
 
+    /* ── QUALIFICATIONS SECTION ── */
+    .qualifications-section {
+      margin-bottom: 1.5rem;
+      padding-top: 0.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .qualifications-title {
+      font-family: var(--display);
+      font-size: clamp(0.9rem, 2vw, 1.3rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 16px rgba(0,200,232,0.2);
+    }
+    .qualifications-subtitle {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+    .qualifications-intro {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.85;
+      color: var(--text);
+      width: 550px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 1.6rem;
+      min-height: 4.2em;
+      text-align: center;
+    }
+    .cycling-word {
+      display: inline;
+      color: var(--cyan-bright);
+      font-weight: normal;
+      transition: opacity 0.35s ease;
+      padding: 0;
+      margin: 0;
+    }
+    #cycleNoun { }
+    #cycleRole { margin-right: 0.3em; }
+    .cycling-word.fade-out {
+      opacity: 0;
+    }
+    .cycling-word.fade-in {
+      opacity: 1;
+    }
+    .qualifications-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .qualifications-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+    .qualifications-list li:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .qualifications-list li::before {
+      content: '*';
+      color: var(--cyan);
+      opacity: 0.6;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* ── SISTER COMMUNITIES TYPEWRITER ── */
+    .typewriter-slot {
+      color: var(--cyan-bright);
+      border-right: 2px solid var(--cyan);
+      padding-right: 2px;
+      animation: blink-caret 0.72s step-end infinite;
+      white-space: nowrap;
+    }
+    .typewriter-slot a {
+      color: var(--cyan-bright);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      transition: color 0.18s;
+    }
+    .typewriter-slot a:hover {
+      color: var(--cyan);
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: var(--cyan); }
+      50%      { border-color: transparent; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       .event-cover { max-width: 100%; }
@@ -620,16 +737,37 @@
     <section class="form-section">
       <div class="marquee-wrap" style="margin-bottom: 1.5rem;">
         <div class="marquee-track">
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 1-2 months, typically every second Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
         </div>
       </div>
 
       <div class="page-header">
         <h1 class="page-title">Physical Futures</h1>
         <p class="page-sub"><span class="page-header-label" style="margin-bottom: 0;">// Join the registry</span> &nbsp;&middot;&nbsp; Bridging the gap between artists &amp; engineers</p>
+      </div>
+
+      <div class="qualifications-section">
+        <p class="qualifications-intro" style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
+          Physical Futures is a <span class="cycling-word fade-in" id="cycleNoun">initiative</span> of high-agency <span class="cycling-word fade-in" id="cycleRole">artists</span>who design future-forward objects that center the physical body.
+        </p>
+        <ul class="qualifications-list">
+          <li>Physical Futures is not a spectator sport. Every attendee contributes and is actively creating.</li>
+          <li>All Physical Futures projects must be material objects and revolve around the human body.</li>
+          <li>Physical Futures is for engineers wanting to imbue more craftsmanship into their work, and artists who want to refine their technique.</li>
+          <li>Physical Futures is a VC &amp; scout-free space. No VCs.</li>
+          <li>Bring a material project you've made, or a project you want feedback on&ndash;&ndash; we love supporting WIPs. We're here for all of it as long as it's physically futuristic.</li>
+          <li>Not sure if your work counts? Message one of us!</li>
+        </ul>
+
+        <div class="sister-communities" style="margin-top: 1.8rem;">
+          <p style="font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.8rem;">Learn more about our sister communities:</p>
+          <p class="sister-line" style="font-family: var(--mono); font-size: 0.85rem; line-height: 2.2; color: var(--text);">
+            Looking for <span class="typewriter-slot" id="sisterTypewriter"></span>
+          </p>
+        </div>
       </div>
 
       <form id="applyForm" action="https://formspree.io/f/mykbynpv" method="POST">
@@ -647,7 +785,7 @@
         </div>
         <div class="field">
           <label for="discipline">Discipline(s) *</label>
-          <textarea id="discipline" name="discipline" required placeholder="e.g. Fashion Design, Industrial Design, Jewelry, Sculpture, Architecture, Furniture, Mechanical Engineering, Electrical Engineering, Optical Engineering, Neuroscience, Biosci, Materials Science, Chemistry, Robotics, Automation, Computational Design, Software, Research Scientist"></textarea>
+          <textarea id="discipline" name="discipline" required placeholder="e.g. Fashion Design, Mechanical Engineering, Architecture, Material Science, Sculpture, Electrical Engineering, Jewelry, Robotics"></textarea>
         </div>
         <div class="field">
           <label for="project">What are you currently working on? *</label>
@@ -771,6 +909,8 @@
         <p>⌬ ⌬ ⌬</p>
       </div>
 
+      <h2 class="manifesto-title">// About</h2>
+
       <div class="pillars">
         <div class="pillar">No startup pitches. No panels. Five-minute demos, then conversation.</div>
         <div class="pillar">Our community is interdisciplinary, and intergenerational. All generations are welcome here.</div>
@@ -796,6 +936,131 @@
       if (res.ok) { form.style.display = 'none'; success.style.display = 'block'; }
       else { alert('Something went wrong — please try again or email contact@sebastianvogelmann.com directly.'); }
     });
+  </script>
+
+  <script>
+    /* ── BRACKET CURSOR: hexagon on mousedown ── */
+    document.addEventListener('mousedown', () => document.documentElement.classList.add('cursor-active'));
+    document.addEventListener('mouseup',   () => document.documentElement.classList.remove('cursor-active'));
+  </script>
+
+  <script>
+    /* ── CYCLING WORD ANIMATIONS ── */
+    function cycleWords(elementId, words, interval, lingerIndex) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      let i = 0;
+      function next() {
+        el.classList.add('fade-out');
+        el.classList.remove('fade-in');
+        setTimeout(() => {
+          i = (i + 1) % words.length;
+          el.textContent = words[i];
+          el.classList.remove('fade-out');
+          el.classList.add('fade-in');
+          // If this is the linger index, wait longer before next cycle
+          const isLinger = (lingerIndex !== undefined && i === lingerIndex);
+          setTimeout(next, isLinger ? interval * 2.5 : interval);
+        }, 380);
+      }
+      setTimeout(next, interval);
+    }
+
+    cycleWords('cycleNoun',
+      ['community', 'space', 'collective', 'initiative', 'salon', 'cohort'],
+      1800
+    );
+    cycleWords('cycleRole',
+      ['polymaths', 'material scientists', 'artists', 'futurists', 'material scientists', 'researchers', 'craftspeople', 'futurists'],
+      1800,
+      7  // linger on "futurists" (index 7)
+    );
+  </script>
+
+  <script>
+    /* ── SISTER COMMUNITIES TYPEWRITER ── */
+    (function() {
+      const slot = document.getElementById('sisterTypewriter');
+      if (!slot) return;
+
+      const items = [
+        { typed: 'HCI interfaces? ', linkText: "That's interface.click.", href: 'https://www.interface.click/' },
+        { typed: 'digital art? ', linkText: "That's TIAT.place.", href: 'https://www.tiat.place/' },
+        { typed: 'outer space? ', linkText: "That's SSGL.", href: 'https://www.stepsleaps.org/' },
+        { typed: 'all of the above? ', linkText: "That's demos & chill.", href: 'https://demos.club/' }
+      ];
+
+      const TYPE_SPEED   = 52;   // ms per char typing
+      const DELETE_SPEED  = 32;   // ms per char deleting
+      const PAUSE_AFTER   = 2800; // ms to read before deleting
+      const PAUSE_BETWEEN = 400;  // ms pause between items
+
+      let current = 0;
+
+      function typeText(text, i, cb) {
+        if (i <= text.length) {
+          slot.textContent = text.slice(0, i);
+          setTimeout(() => typeText(text, i + 1, cb), TYPE_SPEED);
+        } else {
+          cb();
+        }
+      }
+
+      function typeLink(text, href, plainPrefix, i, cb) {
+        if (i <= text.length) {
+          slot.innerHTML = plainPrefix + '<a href="' + href + '" target="_blank" rel="noopener">' + text.slice(0, i) + '</a>';
+          setTimeout(function() {
+            typeLink(text, href, plainPrefix, i + 1, cb);
+          }, TYPE_SPEED);
+        } else {
+          cb(plainPrefix);
+        }
+      }
+
+      function deleteAll(fullText, i, cb) {
+        if (i >= 0) {
+          slot.textContent = fullText.slice(0, i);
+          setTimeout(() => deleteAll(fullText, i - 1, cb), DELETE_SPEED);
+        } else {
+          slot.textContent = '';
+          cb();
+        }
+      }
+
+      function runItem(index) {
+        var item = items[index];
+        typeText(item.typed, 0, function() {
+          typeLink(item.linkText, item.href, item.typed, 0, function(plainPart) {
+            var fullForDelete = item.typed + item.linkText;
+            setTimeout(function() {
+              // Delete everything char by char
+              var len = fullForDelete.length;
+              function delChar(pos) {
+                if (pos >= 0) {
+                  var remaining = fullForDelete.slice(0, pos);
+                  // If remaining is longer than typed portion, show partial link
+                  if (remaining.length > item.typed.length) {
+                    slot.innerHTML = item.typed + '<a href="' + item.href + '" target="_blank" rel="noopener">' + remaining.slice(item.typed.length) + '</a>';
+                  } else {
+                    slot.textContent = remaining;
+                  }
+                  setTimeout(function() { delChar(pos - 1); }, DELETE_SPEED);
+                } else {
+                  slot.textContent = '';
+                  setTimeout(function() {
+                    current = (current + 1) % items.length;
+                    runItem(current);
+                  }, PAUSE_BETWEEN);
+                }
+              }
+              delChar(len);
+            }, PAUSE_AFTER);
+          });
+        });
+      }
+
+      setTimeout(function() { runItem(0); }, 800);
+    })();
   </script>
 
 </body>
