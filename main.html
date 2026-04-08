@@ -21,7 +21,7 @@
       --cyan-bright: #a8f0ff;
       --cyan-key:    #008ba3;
       --text:        rgba(168,240,255,0.82);
-      --text-dim:    rgba(168,240,255,0.32);
+      --text-dim:    rgba(168,240,255,0.55);
       --mono:        'Share Tech Mono', monospace;
       --display:     'Orbitron', sans-serif;
     }
@@ -171,7 +171,7 @@
     }
     .page-header-label {
       font-family: var(--mono);
-      font-size: 0.58rem;
+      font-size: 12px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -191,7 +191,7 @@
     }
     .page-sub {
       font-family: var(--mono);
-      font-size: 0.72rem;
+      font-size: 12px;
       color: var(--text-dim);
       letter-spacing: 0.06em;
     }
@@ -208,7 +208,8 @@
 
     label {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 16px;
+      font-weight: 700;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--cyan);
@@ -254,7 +255,7 @@
     }
     .marquee-track span {
       font-family: var(--mono);
-      font-size: 0.68rem;
+      font-size: 12px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--cyan);
@@ -277,7 +278,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.72rem;
+      font-size: 12px;
       letter-spacing: 0.06em;
       text-transform: none;
       color: var(--text);
@@ -344,10 +345,10 @@
       gap: 1.2rem;
       margin: 4rem 0 3.5rem;
       font-family: var(--mono);
-      font-size: 0.58rem;
+      font-size: 12px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: rgba(168,240,255,0.72);
     }
     .section-divider::before,
     .section-divider::after {
@@ -364,7 +365,7 @@
 
     .event-label {
       font-family: var(--mono);
-      font-size: 0.58rem;
+      font-size: 12px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--cyan);
@@ -383,7 +384,7 @@
     /* ── COVER FOOTNOTE ── */
     .cover-footnote {
       font-family: var(--mono);
-      font-size: 0.55rem;
+      font-size: 12px;
       letter-spacing: 0.12em;
       color: var(--text-dim);
       margin-top: 0.5rem;
@@ -437,7 +438,7 @@
     }
     .cover-placeholder-text {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 12px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(0,200,232,0.2);
@@ -456,7 +457,7 @@
     /* presenters list */
     .presenters-label {
       font-family: var(--mono);
-      font-size: 0.58rem;
+      font-size: 12px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--cyan);
@@ -495,7 +496,7 @@
     .presenter-name { }
 
     .presenter-role {
-      font-size: 0.6rem;
+      font-size: 12px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -503,7 +504,7 @@
     }
 
     .presenter-arrow {
-      font-size: 0.7rem;
+      font-size: 12px;
       color: var(--cyan);
       opacity: 0;
       transition: opacity 0.18s;
@@ -525,6 +526,7 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--cyan);
+      margin-top: 2rem;
       margin-bottom: 2rem;
       text-shadow: 0 0 16px rgba(0,200,232,0.2);
     }
@@ -562,7 +564,7 @@
       content: '>';
       color: var(--cyan);
       opacity: 0.5;
-      font-size: 0.7rem;
+      font-size: 12px;
       flex-shrink: 0;
     }
 
@@ -599,7 +601,7 @@
       align-items: center;
       gap: 0.5rem;
       font-family: var(--mono);
-      font-size: 0.62rem;
+      font-size: 12px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -631,7 +633,7 @@
     }
     .qualifications-subtitle {
       font-family: var(--mono);
-      font-size: 0.72rem;
+      font-size: 12px;
       letter-spacing: 0.08em;
       color: var(--text-dim);
       text-transform: uppercase;
@@ -746,7 +748,7 @@
 
       <div class="page-header">
         <h1 class="page-title">Physical Futures</h1>
-        <p class="page-sub"><span class="page-header-label" style="margin-bottom: 0;">// Join the registry</span> &nbsp;&middot;&nbsp; Bridging the gap between artists &amp; engineers</p>
+        <p class="page-sub"><span class="page-header-label" style="margin-bottom: 0;">// Join the registry</span> &nbsp;&middot;&nbsp; Bridging the gap between artists &amp; engineers shifting the culture.</p>
       </div>
 
       <div class="qualifications-section">
@@ -762,12 +764,6 @@
           <li>Not sure if your work counts? Message one of us!</li>
         </ul>
 
-        <div class="sister-communities" style="margin-top: 1.8rem;">
-          <p style="font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.8rem;">Learn more about our sister communities:</p>
-          <p class="sister-line" style="font-family: var(--mono); font-size: 0.85rem; line-height: 2.2; color: var(--text);">
-            Looking for <span class="typewriter-slot" id="sisterTypewriter"></span>
-          </p>
-        </div>
       </div>
 
       <form id="applyForm" action="https://formspree.io/f/mykbynpv" method="POST">
@@ -803,6 +799,13 @@
       </form>
       <div class="form-success" id="formSuccess">
         > Received. We'll be in touch before the lineup drops.
+      </div>
+
+      <div class="sister-communities" style="margin-top: 1.8rem;">
+        <p style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.8rem;">Learn more about our sister communities:</p>
+        <p class="sister-line" style="font-family: var(--mono); font-size: 0.85rem; line-height: 2.2; color: var(--text);">
+          Looking for <span class="typewriter-slot" id="sisterTypewriter"></span>
+        </p>
       </div>
     </section>
 
@@ -886,8 +889,8 @@
         <li><a href="https://aprosina.com/" target="_blank" rel="noopener"><span class="presenter-name">Anastasia Prosina</span><span class="presenter-role">Space Hug: Astronaut Sleeping Bags, Space Architecture</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://wadeful.net/" target="_blank" rel="noopener"><span class="presenter-name">Norm O'Hagan</span><span class="presenter-role">Cadence: E-ink watch, Paragonday</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">DuoMorph: Inflatable 3D printing, Sensora: Audio-Haptic Orbs</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://antimatter15.com/" target="_blank" rel="noopener"><span class="presenter-name">Kevin Kwok</span><span class="presenter-role">KwokTech</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Fish leather, LED guitar pick</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://antimatter15.com/" target="_blank" rel="noopener"><span class="presenter-name">Kevin Kwok</span><span class="presenter-role">KwokTech: Agent Relay</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Fish leather, LED PCB guitar pick</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://x.com/syntacticspice" target="_blank" rel="noopener"><span class="presenter-name">Anna Brewer</span><span class="presenter-role">Familiar</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">Bottle-based Translucent 3D Printing Filament</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">Covert PCB Earrings, Ghost: Retroreflective Dress</span><span class="presenter-arrow">↗</span></a></li>
@@ -912,11 +915,13 @@
       <h2 class="manifesto-title">// About</h2>
 
       <div class="pillars">
-        <div class="pillar">No startup pitches. No panels. Five-minute demos, then conversation.</div>
+        <div class="pillar">This is a community for HCD artists, founders, and engineers who make physical, future-forward work. <span><span>San Francisco has long been lacking a space that prioritizes the physical body over the digital body. There wasn't an exclusive space for those that designed physical, future-oriented objects. Now there is.</span></span></div>
+        <div class="pillar">We wanted to create a space for likeminded HCD folks to help advance each others' work to the next level.</div>
+        <div class="pillar">No startup pitches. 5 minute demos &amp; presentations of WIPs, projects, research; followed by an evening of talking shop.</div>
         <div class="pillar">Our community is interdisciplinary, and intergenerational. All generations are welcome here.</div>
-        <div class="pillar">Curated over open. Every attendee is doing something genuinely strange and physical.</div>
-        <div class="pillar">Disciplines collide. Fashion meets optical engineering. Jewelry meets robotics.</div>
-        <div class="pillar">The physical human body is the through-line. Everything we make touches it.</div>
+        <div class="pillar">The lineup for each event is meticulously curated according to theme, referrals, and date of application.</div>
+        <div class="pillar">Disciplines collide here. This is where fashion meets optical engineering, and jewelry meets robotics.</div>
+        <div class="pillar">The physical body &amp; material reverence is the throughline. Everyone here has a deep reverence for the material process&mdash; materials must be coaxed, they don't bend to your every whim like software. We believe this material, physical process teaches a patience that can't be learned any other way.</div>
       </div>
     </section>
 

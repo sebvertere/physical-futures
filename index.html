@@ -17,7 +17,7 @@
       --cyan-bright: #a8f0ff;
       --cyan-key:    #008ba3;   /* darker cyan for key bottom face */
       --text:        rgba(168,240,255,0.8);
-      --text-dim:    rgba(168,240,255,0.28);
+      --text-dim:    rgba(168,240,255,0.55);
       --mono:        'Share Tech Mono', monospace;
       --display:     'Orbitron', sans-serif;
     }
@@ -99,7 +99,7 @@
     /* ── BOOT META ── */
     .boot-meta {
       font-family: var(--mono);
-      font-size: 0.58rem;
+      font-size: 12px;
       letter-spacing: 0.18em;
       color: var(--text-dim);
       margin-bottom: 2.8rem;
@@ -229,7 +229,7 @@
       left: 50%;
       transform: translateX(-50%);
       font-family: var(--mono);
-      font-size: 0.5rem;
+      font-size: 12px;
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: rgba(0,200,232,0.12);
@@ -320,9 +320,10 @@
           useAngle = angle * (1 - pull) + ta * pull;
         }
 
-        // gentle organic wobble
-        const wobbleAmp = towardCenter ? rand(0.25, 0.55) : rand(0.12, 0.35);
+        // gentle organic wobble — layered frequencies for more natural feel
+        const wobbleAmp = towardCenter ? rand(0.30, 0.62) : rand(0.18, 0.45);
         useAngle += Math.sin(Date.now() * 0.003 + x * 0.01 + y * 0.01) * wobbleAmp * rand(0.6, 1.4);
+        useAngle += Math.sin(Date.now() * 0.0017 + x * 0.023 + y * 0.019) * wobbleAmp * rand(0.15, 0.35);
 
         const x2 = x + Math.cos(useAngle) * baseLen;
         const y2 = y + Math.sin(useAngle) * baseLen;
@@ -331,7 +332,16 @@
         if (y2 < -H() * 0.1 || y2 > H() * 1.1) return;
 
         const maxA = rand(0.28, 0.55) * (depth / 7);
-        const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false };
+        // Organic control point: offset perpendicular to the segment for Bezier curvature
+        const mx = (x + x2) * 0.5;
+        const my = (y + y2) * 0.5;
+        const segLen = Math.sqrt((x2 - x) ** 2 + (y2 - y) ** 2);
+        const perpX = -(y2 - y) / (segLen || 1);
+        const perpY =  (x2 - x) / (segLen || 1);
+        const curvature = rand(-0.35, 0.35) * segLen; // subtle organic bend
+        const cpx = mx + perpX * curvature;
+        const cpy = my + perpY * curvature;
+        const seg  = { x1: x, y1: y, x2, y2, cpx, cpy, alpha: 0, maxAlpha: maxA, grow: 0, done: false };
         mycSegs.push(seg);
 
         const delay = rand(140, 620);
@@ -624,7 +634,16 @@
 
         // Brighter max alpha than normal segments
         const maxA = rand(0.45, 0.72) * (depth / 6);
-        const seg  = { x1: x, y1: y, x2, y2, alpha: 0, maxAlpha: maxA, grow: 0, done: false, creeper: true };
+        // Organic control point for creeper curvature
+        const cmx = (x + x2) * 0.5;
+        const cmy = (y + y2) * 0.5;
+        const cLen = Math.sqrt((x2 - x) ** 2 + (y2 - y) ** 2);
+        const cperpX = -(y2 - y) / (cLen || 1);
+        const cperpY =  (x2 - x) / (cLen || 1);
+        const cCurv = rand(-0.28, 0.28) * cLen;
+        const cpx = cmx + cperpX * cCurv;
+        const cpy = cmy + cperpY * cCurv;
+        const seg  = { x1: x, y1: y, x2, y2, cpx, cpy, alpha: 0, maxAlpha: maxA, grow: 0, done: false, creeper: true };
         creeperSegs.push(seg);
 
         // Slightly longer delays for a creeping feel
@@ -710,8 +729,18 @@
 
         if (seg.alpha < seg.maxAlpha) seg.alpha = Math.min(seg.maxAlpha, seg.alpha + seg._fin);
 
-        const tx = seg.x1 + (seg.x2 - seg.x1) * seg.grow;
-        const ty = seg.y1 + (seg.y2 - seg.y1) * seg.grow;
+        // For organic mycelium segments with control points, interpolate along the quadratic Bezier
+        const hasCurve = seg.cpx !== undefined;
+        let tx, ty;
+        if (hasCurve) {
+          const t = seg.grow;
+          const t1 = 1 - t;
+          tx = t1 * t1 * seg.x1 + 2 * t1 * t * seg.cpx + t * t * seg.x2;
+          ty = t1 * t1 * seg.y1 + 2 * t1 * t * seg.cpy + t * t * seg.y2;
+        } else {
+          tx = seg.x1 + (seg.x2 - seg.x1) * seg.grow;
+          ty = seg.y1 + (seg.y2 - seg.y1) * seg.grow;
+        }
 
         // Creeper segments are slightly brighter with a wider glow
         const glowWidth = isCreeper ? 2.2 : 1.4;
@@ -723,18 +752,29 @@
         const dg = isCreeper ? Math.min(255, g + 25) : g;
         const db = isCreeper ? Math.min(255, b + 15) : b;
 
+        // Helper: draw the partial path (curved or straight)
+        function tracePath() {
+          ctx.beginPath();
+          ctx.moveTo(seg.x1, seg.y1);
+          if (hasCurve) {
+            // Partial quadratic Bezier via de Casteljau subdivision at t = seg.grow
+            const t = seg.grow;
+            const cp1x = seg.x1 + (seg.cpx - seg.x1) * t;
+            const cp1y = seg.y1 + (seg.cpy - seg.y1) * t;
+            ctx.quadraticCurveTo(cp1x, cp1y, tx, ty);
+          } else {
+            ctx.lineTo(tx, ty);
+          }
+        }
+
         // thin glow under-layer
-        ctx.beginPath();
-        ctx.moveTo(seg.x1, seg.y1);
-        ctx.lineTo(tx, ty);
+        tracePath();
         ctx.strokeStyle = `rgba(${dr},${dg},${db},${seg.alpha * glowMult})`;
         ctx.lineWidth   = glowWidth;
         ctx.stroke();
 
         // ultra-thin bright core
-        ctx.beginPath();
-        ctx.moveTo(seg.x1, seg.y1);
-        ctx.lineTo(tx, ty);
+        tracePath();
         ctx.strokeStyle = `rgba(${dr},${dg},${db},${seg.alpha})`;
         ctx.lineWidth   = coreWidth;
         ctx.stroke();
