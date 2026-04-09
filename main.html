@@ -157,7 +157,7 @@
       max-width: 820px;
       margin: 0 auto;
       background: var(--void);
-      padding: 3.5rem clamp(1.5rem, 5vw, 4rem) 5rem;
+      padding: 1rem clamp(1.5rem, 5vw, 4rem) 5rem;
       min-height: calc(100vh - 2rem);
       position: relative;
       z-index: 1;
@@ -194,6 +194,7 @@
       font-size: 12px;
       color: var(--text-dim);
       letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     /* ── FORM ── */
@@ -246,7 +247,8 @@
       margin-bottom: 2.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 0.55rem 0;
+      padding: 0.4rem 0;
+      opacity: 1;
     }
     .marquee-track {
       display: flex;
@@ -318,6 +320,14 @@
       transform: translateY(0);
       transition: box-shadow 0.07s ease, transform 0.07s ease;
     }
+    .btn-submit:hover {
+      background: var(--void);
+      color: var(--cyan);
+      box-shadow:
+        0 0 0 1px var(--cyan),
+        0 5px 0 0 var(--cyan-key),
+        0 7px 12px rgba(0,0,0,0.4);
+    }
     .btn-submit:active {
       box-shadow:
         0 0 0 1px rgba(0,0,0,0.18),
@@ -349,6 +359,10 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: rgba(168,240,255,0.72);
+    }
+    .section-divider[id],
+    .manifesto-title[id] {
+      scroll-margin-top: 3rem;
     }
     .section-divider::before,
     .section-divider::after {
@@ -641,7 +655,7 @@
     }
     .qualifications-intro {
       font-family: var(--mono);
-      font-size: 0.85rem;
+      font-size: 20px;
       line-height: 1.85;
       color: var(--text);
       width: 550px;
@@ -651,6 +665,13 @@
       margin-bottom: 1.6rem;
       min-height: 4.2em;
       text-align: center;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: sidebarFlicker 0.6s ease 0.3s forwards;
+    }
+    /* Static (non-cycling) text is 10% lower opacity than the cycling words */
+    .qualifications-intro .static-text {
+      opacity: 0.72;
     }
     .cycling-word {
       display: inline;
@@ -659,6 +680,7 @@
       transition: opacity 0.35s ease;
       padding: 0;
       margin: 0;
+      opacity: 1;
     }
     #cycleNoun { }
     #cycleRole { margin-right: 0.3em; }
@@ -668,6 +690,17 @@
     .cycling-word.fade-in {
       opacity: 1;
     }
+
+    /* ── SCROLL REVEAL for form section ── */
+    .form-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .form-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .qualifications-list {
       list-style: none;
       padding: 0;
@@ -675,6 +708,12 @@
       display: flex;
       flex-direction: column;
       gap: 0;
+      opacity: 0;
+      animation: qualListFadeIn 2.4s ease 0.8s forwards;
+    }
+    @keyframes qualListFadeIn {
+      0%   { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     .qualifications-list li {
       display: flex;
@@ -721,13 +760,141 @@
       50%      { border-color: transparent; }
     }
 
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--void);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem clamp(1.5rem, 5vw, 4rem) 0.5rem;
+      max-width: 820px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: sidebarFlicker 0.6s ease 0.9s forwards;
+    }
+    .top-bar a {
+      font-family: var(--display);
+      font-size: 0.75rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.18s, text-shadow 0.18s;
+    }
+    .top-bar a:hover {
+      color: var(--cyan);
+      text-shadow: 0 0 8px rgba(0,200,232,0.35);
+    }
+
+    /* ── SIDEBAR NAV ── */
+    .sidebar-nav {
+      position: fixed;
+      right: 2.5rem;
+      top: 2.5rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      list-style: none;
+    }
+    .sidebar-nav li {
+      opacity: 0;
+      animation: sidebarFlicker 0.6s ease forwards;
+    }
+    .sidebar-nav li:nth-child(1) { animation-delay: 0.4s; }
+    .sidebar-nav li:nth-child(2) { animation-delay: 1.5s; }
+    .sidebar-nav li:nth-child(3) { animation-delay: 2.1s; }
+    @keyframes sidebarFlicker {
+      0%   { opacity: 0; }
+      15%  { opacity: 0.7; }
+      25%  { opacity: 0.1; }
+      40%  { opacity: 0.85; }
+      55%  { opacity: 0.2; }
+      70%  { opacity: 0.9; }
+      85%  { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+    .sidebar-nav a {
+      display: block;
+      font-family: var(--display);
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      border-left: 2px solid var(--border);
+      transition: color 0.18s, border-color 0.18s, text-shadow 0.18s;
+      white-space: nowrap;
+    }
+    .sidebar-nav a:hover {
+      color: var(--cyan);
+      border-left-color: var(--cyan);
+      text-shadow: 0 0 8px rgba(0,200,232,0.35);
+    }
+
+    /* ── MEMBERS LOGOS SECTION ── */
+    .members-logos-section {
+      margin: 4rem 0 0;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .members-logos-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(168,240,255,0.72);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .members-logos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem 3.5rem;
+      padding: 1rem 0;
+    }
+    .members-logos-grid img,
+    .members-logos-grid svg {
+      max-height: 56px;
+      width: auto;
+      opacity: 0.45;
+      filter: grayscale(1) brightness(1.8);
+      transition: opacity 0.25s, filter 0.25s;
+      color: var(--cyan-bright);
+    }
+    .members-logos-grid img:hover,
+    .members-logos-grid svg:hover {
+      opacity: 0.85;
+      filter: grayscale(0) brightness(1);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       .event-cover { max-width: 100%; }
+      .sidebar-nav { display: none; }
+      .top-bar { padding: 0.4rem 0.8rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ── TOP BAR ── -->
+  <div class="top-bar">
+    <a href="#joinRegistry">Join</a>
+    <a href="#archive">Archive</a>
+    <a href="#manifesto">Manifesto</a>
+    <a href="#about">About</a>
+  </div>
 
   <!-- Two vertical light bands sweeping inward -->
   <div class="tri-pulse tri-pulse--left"></div>
@@ -737,25 +904,16 @@
 
     <!-- ── REGISTRY FORM ── -->
     <section class="form-section">
-      <div class="marquee-wrap" style="margin-bottom: 1.5rem;">
-        <div class="marquee-track">
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-          <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-        </div>
-      </div>
-
-      <div class="page-header">
+      <div class="page-header" style="margin-top: 0;">
         <h1 class="page-title">Physical Futures</h1>
-        <p class="page-sub"><span class="page-header-label" style="margin-bottom: 0;">// Join the registry</span> &nbsp;&middot;&nbsp; Bridging the gap between artists &amp; engineers shifting the culture.</p>
+        <p class="page-sub">// Bridging the gap between artists &amp; engineers shifting the culture.</p>
       </div>
 
       <div class="qualifications-section">
         <p class="qualifications-intro" style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
-          Physical Futures is a <span class="cycling-word fade-in" id="cycleNoun">initiative</span> of high-agency <span class="cycling-word fade-in" id="cycleRole">artists</span>who design future-forward objects that center the physical body.
+          <span class="static-text">Physical Futures is a </span><span class="cycling-word fade-in" id="cycleNoun">initiative</span><span class="static-text"> of high-agency </span><span class="cycling-word fade-in" id="cycleRole">artists</span><span class="static-text"> who design future-forward objects that center the physical body.</span>
         </p>
-        <ul class="qualifications-list">
+        <ul class="qualifications-list" id="qualificationsList">
           <li>Physical Futures is not a spectator sport. Every attendee contributes and is actively creating.</li>
           <li>All Physical Futures projects must be material objects and revolve around the human body.</li>
           <li>Physical Futures is for engineers wanting to imbue more craftsmanship into their work, and artists who want to refine their technique.</li>
@@ -766,6 +924,9 @@
 
       </div>
 
+      <div class="section-divider" id="joinRegistry">Join the Registry</div>
+
+      <div class="form-reveal" id="formRevealWrap">
       <form id="applyForm" action="https://formspree.io/f/mykbynpv" method="POST">
         <div class="field">
           <label for="name">Full Name *</label>
@@ -800,6 +961,7 @@
       <div class="form-success" id="formSuccess">
         > Received. We'll be in touch before the lineup drops.
       </div>
+      </div><!-- /form-reveal -->
 
       <div class="sister-communities" style="margin-top: 1.8rem;">
         <p style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.8rem;">Learn more about our sister communities:</p>
@@ -809,8 +971,44 @@
       </div>
     </section>
 
+    <!-- ── MEMBERS LOGOS ── -->
+    <div class="members-logos-section">
+      <p class="members-logos-title">Our Members Have Worked With:</p>
+      <div class="members-logos-grid">
+        <img src="NASA-Logo-Large.png" alt="NASA" />
+        <img src="01-VOGUE-LOGO-1.png" alt="Vogue" />
+        <img src="Apple_logo_with_text_(white).png" alt="Apple" />
+        <img src="TED_three_letter_logo.svg.png" alt="TED" />
+        <img src="every-lady-gaga-logo-typeface-variation-of-the-mayhem-era-v0-iac03wslvlgf1.png" alt="Lady Gaga" />
+        <img src="MIT_ML_Logo_R_RGB.png" alt="MIT Media Lab" />
+        <img src="harper_logo_white2.png" alt="Harper's Bazaar" />
+        <img src="Google_2015_logo.svg.png" alt="Google" />
+        <img src="paris%20fashion%20week%20logo.png" alt="Paris Fashion Week" />
+        <img src="autodesk%20logo.png" alt="Autodesk" style="max-height: 40px;" />
+        <img src="lucasfilm-logo-png-transparent.png" alt="Lucasfilm" style="max-height: 80px;" />
+        <img src="stanford-university-logo.png" alt="Stanford University" />
+        <img src="2021-mtv-video-music-awards-logo-png_seeklogo-513501.png" alt="MTV Video Music Awards" style="max-height: 110px;" />
+        <img src="llnl-logo.png" alt="Lawrence Livermore National Laboratory" />
+        <img src="mw-stackedlogo-rgb.png" alt="Meow Wolf" />
+        <img src="logo-los-alamos-bw.54583c5e.png" alt="Los Alamos National Laboratory" style="max-height: 80px;" />
+        <img src="playstation-Logo-png-white.png" alt="PlayStation" />
+        <img src="Virgin-Galactic-logo-2007.png" alt="Virgin Galactic" style="max-height: 110px;" />
+        <img src="MML_logo-01.png" alt="MML" />
+      </div>
+    </div>
+
+    <!-- ── NEXT PHYSICAL FUTURES MARQUEE ── -->
+    <div class="marquee-wrap" style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
+      <div class="marquee-track">
+        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+      </div>
+    </div>
+
     <!-- ── ARCHIVE ── -->
-    <div class="section-divider">Archive</div>
+    <div class="section-divider" id="archive">Archive</div>
 
     <!-- ── v.iii: CEREBRAL (upcoming) ── -->
     <div class="event-block">
@@ -856,15 +1054,15 @@
         <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">The Orchard Microfactory</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://harrisonlin.com/" target="_blank" rel="noopener"><span class="presenter-name">Harrison Lin</span><span class="presenter-role">Rhythm Sunlight Generator</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://tomthecarrot.com/" target="_blank" rel="noopener"><span class="presenter-name">Tom Suarez</span><span class="presenter-role">Silicon Wafers</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Peacock Tian-Tsui, Gold Leaf Microbooks, Bioplastic</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role" style="text-align: center;">Peacock Tian-Tsui, Gold Leaf Microbooks, Bioplastic</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.instagram.com/shierperry/" target="_blank" rel="noopener"><span class="presenter-name">Shier Perry</span><span class="presenter-role">Human-Led Futures, Mantaray Comb</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://daniellebaskin.com/" target="_blank" rel="noopener"><span class="presenter-name">Danielle Baskin</span><span class="presenter-role">Face Facemask</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.lizwanders.world/" target="_blank" rel="noopener"><span class="presenter-name">Liz Dorman</span><span class="presenter-role">The Puck</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.levibloch.com/" target="_blank" rel="noopener"><span class="presenter-name">Levi Bloch</span><span class="presenter-role">Industrial Sapphires, Fractography 101</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://lcassiano.com/" target="_blank" rel="noopener"><span class="presenter-name">Lucas Cassiano</span><span class="presenter-role">Carbon Fiber TPU &amp; Clay Robot Limbs</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">3D Prints For Blind Users, Interlocking TPU Fabric,INflatable tpu mechanisms</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role" style="text-align: center;">3D Prints For Blind Users, Interlocking TPU Fabric,INflatable tpu mechanisms</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.instagram.com/lance.v.moore?utm_source=ig_web_button_share_sheet&amp;igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener"><span class="presenter-name">Lance Victor Moore</span><span class="presenter-role">MetaMorphism Metal Masks, Blue Quartz Spikes</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">CompanionBot: Robotic Owl Familiar, Carbon Fiber Claws</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role" style="text-align: center;">CompanionBot: Robotic Owl Familiar, Carbon Fiber Claws</span><span class="presenter-arrow">↗</span></a></li>
       </ul>
     </div>
 
@@ -885,14 +1083,14 @@
       <p class="presenters-label">Presenters</p>
       <ul class="presenter-list">
         <li><a href="https://www.eggney.com/" target="_blank" rel="noopener"><span class="presenter-name">Sydney Parcell</span><span class="presenter-role">Kalediocube, Moiré Inference Bodysuit</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://www.linkedin.com/in/taylor-waddell/" target="_blank" rel="noopener"><span class="presenter-name">Taylor Waddell</span><span class="presenter-role">Computed Axial Lithography (CAL) 3D Printing, Zero-Gravity 3D Prints</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://aprosina.com/" target="_blank" rel="noopener"><span class="presenter-name">Anastasia Prosina</span><span class="presenter-role">Space Hug: Astronaut Sleeping Bags, Space Architecture</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/taylor-waddell/" target="_blank" rel="noopener"><span class="presenter-name">Taylor Waddell</span><span class="presenter-role" style="text-align: center;">Computed Axial Lithography (CAL) 3D Printing, Zero-Gravity 3D Prints</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://aprosina.com/" target="_blank" rel="noopener"><span class="presenter-name">Anastasia Prosina</span><span class="presenter-role" style="text-align: center;">Space Hug: Astronaut Sleeping Bags, Space Architecture</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://wadeful.net/" target="_blank" rel="noopener"><span class="presenter-name">Norm O'Hagan</span><span class="presenter-role">Cadence: E-ink watch, Paragonday</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">DuoMorph: Inflatable 3D printing, Sensora: Audio-Haptic Orbs</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role" style="text-align: center;">DuoMorph: Inflatable 3D printing, Sensora: Audio-Haptic Orbs</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://antimatter15.com/" target="_blank" rel="noopener"><span class="presenter-name">Kevin Kwok</span><span class="presenter-role">KwokTech: Agent Relay</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://me.sh/profile/ching-ching-shiue" target="_blank" rel="noopener"><span class="presenter-name">Ching-Ching Shiue</span><span class="presenter-role">Fish leather, LED PCB guitar pick</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://x.com/syntacticspice" target="_blank" rel="noopener"><span class="presenter-name">Anna Brewer</span><span class="presenter-role">Familiar</span><span class="presenter-arrow">↗</span></a></li>
-        <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">Bottle-based Translucent 3D Printing Filament</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/alder-riley/" target="_blank" rel="noopener"><span class="presenter-name">Alder Riley</span><span class="presenter-role">Bottle-based 3D Printing Filament</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">Covert PCB Earrings, Ghost: Retroreflective Dress</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://tomthecarrot.com/" target="_blank" rel="noopener"><span class="presenter-name">Tom Suarez</span><span class="presenter-role">Waveguide Optic Lenses</span><span class="presenter-arrow">↗</span></a></li>
         <li><a href="https://www.lizwanders.world/" target="_blank" rel="noopener"><span class="presenter-name">Liz Dorman</span><span class="presenter-role">Past &amp; Future Devices</span><span class="presenter-arrow">↗</span></a></li>
@@ -900,7 +1098,7 @@
     </div>
 
     <!-- ── MANIFESTO ── -->
-    <div class="section-divider" style="font-size:0.78rem; letter-spacing:0.28em; color: var(--cyan-bright); opacity:1;">The Manifesto</div>
+    <div class="section-divider" id="manifesto" style="font-size:0.78rem; letter-spacing:0.28em; color: var(--cyan-bright); opacity:1;">The Manifesto</div>
 
     <section class="manifesto-section">
       <h2 class="manifesto-title">// OUR PREROGATIVE</h2>
@@ -912,7 +1110,7 @@
         <p>⌬ ⌬ ⌬</p>
       </div>
 
-      <h2 class="manifesto-title">// About</h2>
+      <h2 class="manifesto-title" id="about">// About</h2>
 
       <div class="pillars">
         <div class="pillar">This is a community for HCD artists, founders, and engineers who make physical, future-forward work. <span><span>San Francisco has long been lacking a space that prioritizes the physical body over the digital body. There wasn't an exclusive space for those that designed physical, future-oriented objects. Now there is.</span></span></div>
@@ -951,7 +1149,7 @@
 
   <script>
     /* ── CYCLING WORD ANIMATIONS ── */
-    function cycleWords(elementId, words, interval, lingerIndex) {
+    function cycleWords(elementId, words, interval, initialDelay) {
       const el = document.getElementById(elementId);
       if (!el) return;
       let i = 0;
@@ -963,23 +1161,42 @@
           el.textContent = words[i];
           el.classList.remove('fade-out');
           el.classList.add('fade-in');
-          // If this is the linger index, wait longer before next cycle
-          const isLinger = (lingerIndex !== undefined && i === lingerIndex);
-          setTimeout(next, isLinger ? interval * 2.5 : interval);
+          setTimeout(next, interval);
         }, 380);
       }
-      setTimeout(next, interval);
+      setTimeout(next, initialDelay || interval);
     }
 
+    /* First word cycles at 1800ms; second word is offset by 600ms */
     cycleWords('cycleNoun',
       ['community', 'space', 'collective', 'initiative', 'salon', 'cohort'],
+      1800,
       1800
     );
     cycleWords('cycleRole',
-      ['polymaths', 'material scientists', 'artists', 'futurists', 'material scientists', 'researchers', 'craftspeople', 'futurists'],
+      ['polymaths', 'engineers', 'artists', 'founders', 'material scientists', 'researchers', 'craftspeople', 'futurists'],
       1800,
-      7  // linger on "futurists" (index 7)
+      2400
     );
+  </script>
+
+  <script>
+    /* ── FORM REVEAL on scroll ── */
+    (function() {
+      var formWrap = document.getElementById('formRevealWrap');
+      if (!formWrap) return;
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            formWrap.classList.add('revealed');
+            observer.unobserve(formWrap);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      observer.observe(formWrap);
+    })();
   </script>
 
   <script>
@@ -1067,6 +1284,8 @@
       setTimeout(function() { runItem(0); }, 800);
     })();
   </script>
+
+  <!-- marquee loads immediately, no delay needed -->
 
 </body>
 </html>

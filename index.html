@@ -865,13 +865,24 @@
 
     run();
 
-    keyBtn.addEventListener('click', e => {
-      e.preventDefault();
+    function activateKey() {
       keyBtn.classList.add('pressing');
       setTimeout(() => {
         document.body.classList.add('fading');
         setTimeout(() => { window.location.href = 'main.html'; }, 650);
       }, 160);
+    }
+
+    keyBtn.addEventListener('click', e => {
+      e.preventDefault();
+      activateKey();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        activateKey();
+      }
     });
   </script>
 
