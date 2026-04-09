@@ -200,6 +200,52 @@
       transform: translateY(4px);
     }
 
+    /* ── BOOT LOADER BAR ── */
+    .boot-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 220px;
+    }
+    .boot-loader__label {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-shadow: 0 0 8px rgba(0,200,232,0.4);
+    }
+    .boot-loader__track {
+      width: 100%;
+      height: 6px;
+      background: rgba(0,200,232,0.1);
+      border: 1px solid rgba(0,200,232,0.25);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .boot-loader__fill {
+      width: 0%;
+      height: 100%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px rgba(0,200,232,0.6);
+      border-radius: 2px;
+      transition: width 0.05s linear;
+    }
+
+    /* Enter wrapper reveal */
+    .key-enter {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .key-enter.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ── TAGLINE ── */
     .tagline {
       font-family: var(--mono);
@@ -261,8 +307,18 @@
     </div>
 
     <div class="key-wrap" id="keyWrap">
-      <span class="key-cursor">▸</span>
-      <a class="key-btn" id="keyBtn" href="main.html">enter</a>
+      <!-- Loading bar (shown first) -->
+      <div class="boot-loader" id="bootLoader">
+        <span class="boot-loader__label" id="bootLabel">BOOTING... 0%</span>
+        <div class="boot-loader__track">
+          <div class="boot-loader__fill" id="bootFill"></div>
+        </div>
+      </div>
+      <!-- Enter button (hidden until load completes) -->
+      <div class="key-enter" id="keyEnter" style="display:none;">
+        <span class="key-cursor">▸</span>
+        <a class="key-btn" id="keyBtn" href="main.html">enter</a>
+      </div>
     </div>
 
     <p class="tagline" id="tagline">
@@ -832,12 +888,16 @@
   </script>
 
   <script>
-    const line1   = document.getElementById('line1');
-    const line2   = document.getElementById('line2');
-    const boot    = document.getElementById('bootMeta');
-    const keyWrap = document.getElementById('keyWrap');
-    const keyBtn  = document.getElementById('keyBtn');
-    const tagline = document.getElementById('tagline');
+    const line1      = document.getElementById('line1');
+    const line2      = document.getElementById('line2');
+    const boot       = document.getElementById('bootMeta');
+    const keyWrap    = document.getElementById('keyWrap');
+    const bootLoader = document.getElementById('bootLoader');
+    const bootLabel  = document.getElementById('bootLabel');
+    const bootFill   = document.getElementById('bootFill');
+    const keyEnter   = document.getElementById('keyEnter');
+    const keyBtn     = document.getElementById('keyBtn');
+    const tagline    = document.getElementById('tagline');
 
     const type = (el, text, speed) => new Promise(resolve => {
       let i = 0;
@@ -850,6 +910,25 @@
 
     const wait = ms => new Promise(r => setTimeout(r, ms));
 
+    function runBootLoader() {
+      return new Promise(resolve => {
+        const duration = 8000; // 8 seconds
+        const start = performance.now();
+        function tick(now) {
+          const elapsed = now - start;
+          const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+          bootFill.style.width = pct + '%';
+          bootLabel.textContent = 'BOOTING... ' + pct + '%';
+          if (pct < 100) {
+            requestAnimationFrame(tick);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
     async function run() {
       await wait(300);
       boot.classList.add('show');
@@ -859,6 +938,14 @@
       await type(line2, 'Futures', 82);
       await wait(350);
       keyWrap.classList.add('show');
+      // Run loading bar
+      await runBootLoader();
+      // Hide loader, reveal enter button
+      bootLoader.style.display = 'none';
+      keyEnter.style.display = 'flex';
+      // Trigger reflow before adding class for transition
+      void keyEnter.offsetWidth;
+      keyEnter.classList.add('show');
       await wait(400);
       tagline.classList.add('show');
     }
