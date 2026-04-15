@@ -298,7 +298,7 @@
       <span>SYS_INIT · 0x5046</span>
       <span>NODE: SF-01</span>
       <span>STATUS: ACTIVE</span>
-      <span>v.iii · APR 9</span>
+      <span>v.iv · MAY 14</span>
     </div>
 
     <div class="title-block">
@@ -326,7 +326,7 @@
     </p>
   </div>
 
-  <p class="stamp">PHYSICAL_FUTURES · SAN FRANCISCO · ARTGINEERING</p>
+  <p class="stamp" id="stampSkip" style="cursor:pointer">PHYSICAL_FUTURES · SAN FRANCISCO · ARTGINEERING</p>
 
   <script>
     /* ── MYCELIUM + CIRCUIT BRIDGE ANIMATION ── */
@@ -950,7 +950,27 @@
       tagline.classList.add('show');
     }
 
+    let skipped = false;
     run();
+
+    document.getElementById('stampSkip').addEventListener('click', () => {
+      if (skipped) return;
+      skipped = true;
+      // Immediately set title text if still typing
+      line1.classList.remove('typing');
+      line2.classList.remove('typing');
+      line1.textContent = 'Physical';
+      line2.textContent = 'Futures';
+      // Show boot meta
+      boot.classList.add('show');
+      // Show key wrap and skip to enter button
+      keyWrap.classList.add('show');
+      bootLoader.style.display = 'none';
+      keyEnter.style.display = 'flex';
+      void keyEnter.offsetWidth;
+      keyEnter.classList.add('show');
+      tagline.classList.add('show');
+    });
 
     function activateKey() {
       keyBtn.classList.add('pressing');

@@ -152,7 +152,7 @@
       background: repeating-linear-gradient(
         0deg,
         transparent 0px, transparent 3px,
-        rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+        rgba(0,0,0,0.10) 3px, rgba(0,0,0,0.10) 4px
       );
     }
 
@@ -503,6 +503,7 @@
       color: var(--cyan);
       opacity: 0.55;
       margin-bottom: 0.8rem;
+      text-align: left;
     }
 
     .presenter-list {
@@ -518,14 +519,15 @@
 
     .presenter-list a {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
       padding: 0.75rem 0;
       text-decoration: none;
       color: var(--text);
       font-family: var(--mono);
       font-size: 0.88rem;
       transition: color 0.18s, padding-left 0.18s;
+      gap: 1.2rem;
+      flex-wrap: wrap;
     }
     .presenter-list a:hover {
       color: var(--cyan);
@@ -533,14 +535,18 @@
     }
     .presenter-list a:hover .presenter-arrow { opacity: 1; }
 
-    .presenter-name { }
+    .presenter-name {
+      text-align: left;
+      flex-shrink: 0;
+    }
 
     .presenter-role {
       font-size: 12px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-dim);
-      flex-shrink: 0;
+      flex: 1;
+      text-align: center;
     }
 
     .presenter-arrow {
@@ -548,7 +554,7 @@
       color: var(--cyan);
       opacity: 0;
       transition: opacity 0.18s;
-      margin-left: 0.5rem;
+      margin-left: auto;
       flex-shrink: 0;
     }
 
@@ -932,7 +938,7 @@
     <section class="form-section">
       <div class="page-header" style="margin-top: 0;">
         <h1 class="page-title">Physical Futures</h1>
-        <p class="page-sub">// Bridging the gap between artists &amp; engineers shifting the culture.</p>
+        <p class="page-sub">// Bridging the gap between artists &amp; hardware engineers shifting the culture.</p>
       </div>
 
       <div class="qualifications-section">
@@ -942,7 +948,7 @@
         <ul class="qualifications-list" id="qualificationsList">
           <li>Physical Futures is not a spectator sport. Every attendee contributes and is actively creating.</li>
           <li>All Physical Futures projects must be material objects and revolve around the human body.</li>
-          <li>Physical Futures is for engineers wanting to imbue more craftsmanship into their work, and artists who want to refine their technique.</li>
+          <li>Physical Futures is for hardware engineers wanting to imbue more craftsmanship into their work, and artists who want to refine their (tech)nique.</li>
           <li>Physical Futures is a VC &amp; scout-free space. Absolutely no VCs.</li>
           <li>Bring a material project you've made, or a project you want feedback on&ndash;&ndash; we love supporting WIPs. We're here for all of it as long as it's physically futuristic.</li>
           <li>Not sure if your work counts? Message one of us!</li>
@@ -1026,19 +1032,45 @@
     <!-- ── NEXT PHYSICAL FUTURES MARQUEE ── -->
     <div class="marquee-wrap" style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
       <div class="marquee-track">
-        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
-        <span>Next Salon: April 9 &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: May 14th &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: May 14th &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: May 14th &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
+        <span>Next Salon: May 14th &bull; San Francisco &bull; Physical Futures convenes every 2nd Thursday of the month.</span>
       </div>
     </div>
 
     <!-- ── ARCHIVE ── -->
     <div class="section-divider" id="archive">Archive</div>
 
-    <!-- ── v.iii: CEREBRAL (upcoming) ── -->
+    <!-- ── v.4: TBA (upcoming) ── -->
     <div class="event-block">
-      <p class="event-label">Physical Futures v.iii · <span class="upcoming-text">Upcoming</span></p>
+      <p class="event-label">Physical Futures v.4 · <span class="upcoming-text">Upcoming</span></p>
+      <h2 class="event-title">????</h2>
+
+      <div class="event-cover event-cover--placeholder" style="position: relative; overflow: hidden;">
+        <canvas id="vineCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; font-weight: 400;"></canvas>
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="position: relative; opacity: 0.12; z-index: 0;">
+          <polygon points="60,10 110,35 110,85 60,110 10,85 10,35" stroke="rgba(0,200,232,0.5)" stroke-width="0.8" fill="none"/>
+          <polygon points="60,25 95,42 95,78 60,95 25,78 25,42" stroke="rgba(0,200,232,0.35)" stroke-width="0.6" fill="none"/>
+          <polygon points="60,40 80,50 80,70 60,80 40,70 40,50" stroke="rgba(0,200,232,0.25)" stroke-width="0.5" fill="none"/>
+          <circle cx="60" cy="60" r="2" fill="rgba(0,200,232,0.25)"/>
+        </svg>
+      </div>
+
+      <p class="event-description">
+        This Physical Futures will grow in soon enough...
+      </p>
+      <p class="event-description" style="font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(168,240,255,0.52); margin-top: -1.2rem;">SPONSOR: TBA</p>
+
+      <p class="presenters-label">Presenters</p>
+      <ul class="presenter-list presenter-list--tba">
+        <li><span class="tba">TBA</span></li>
+      </ul>
+    </div>
+
+    <!-- ── v.iii: CEREBRAL ── -->
+    <div class="event-block">
+      <p class="event-label">Physical Futures v.iii</p>
       <h2 class="event-title">Cerebral</h2>
 
       <div class="event-cover" style="aspect-ratio: unset; height: auto;">
@@ -1047,13 +1079,27 @@
       <p class="cover-footnote">Featured cover futurist: <a href="https://ninonlizemasclef.com/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">Ninon Liz&eacute;-Masclef</a></p>
 
       <p class="event-description">
-        This Physical Futures will revolve around the mind, human head, brain, consciousness, and thought. The artist lineup includes fashion designers, architects, jewelers, sculptors, furniture designers, and industrial designers. The STEM lineup includes neuroscientists, biologists, various engineers (MechE, electrical, optical), material scientists, and computational designers.
+        This Physical Futures focused on the human mind, head, brain, consciousness, and thought.
       </p>
       <p class="event-description" style="font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(168,240,255,0.52); margin-top: -1.2rem;">SPONSOR: <a href="https://raven.computer/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 0.2em; transition: color 0.18s;">RAVEN RESONANCE</a></p>
 
       <p class="presenters-label">Presenters</p>
-      <ul class="presenter-list presenter-list--tba">
-        <li><span class="tba">TBA</span></li>
+      <ul class="presenter-list">
+        <li><a href="https://lizabender.com/" target="_blank" rel="noopener"><span class="presenter-name">Liza Bender</span><span class="presenter-role">Lace Lichen Faraday Fedora</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.christiannataylor.com/" target="_blank" rel="noopener"><span class="presenter-name">Christianna Taylor</span><span class="presenter-role">Microgravity Fabric</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.levibloch.com/" target="_blank" rel="noopener"><span class="presenter-name">Levi Bloch</span><span class="presenter-role">Whisper Watch</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.linkedin.com/in/adeobeso/?locale=en" target="_blank" rel="noopener"><span class="presenter-name">Alvaro De Obeso</span><span class="presenter-role">Agave-Mycelium Biocomposite Fabric</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.vanessa-chang.com/home-1" target="_blank" rel="noopener"><span class="presenter-name">Vanessa Chang</span><span class="presenter-role">The Body Digital</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://otaviogood.com/" target="_blank" rel="noopener"><span class="presenter-name">Ot&aacute;vio Good</span><span class="presenter-role">GlowTie, Tessellate PCB Chandeliers</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://alexglow.com/" target="_blank" rel="noopener"><span class="presenter-name">Alex Glow</span><span class="presenter-role">Brainwave Wings, Thinker Blinker</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.cyr.is/" target="_blank" rel="noopener"><span class="presenter-name">Cyris Kissane</span><span class="presenter-role">BCI DAWs, Irreplicable Fractal Hypercube</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://tomthecarrot.com/" target="_blank" rel="noopener"><span class="presenter-name">Tom Suarez</span><span class="presenter-role">Fiber Laser PCBs</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://gtblabs.com/" target="_blank" rel="noopener"><span class="presenter-name">Glenn Black</span><span class="presenter-role">Taser Knives</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://quantumlibris.com/entrance" target="_blank" rel="noopener"><span class="presenter-name">Verda Korzeniewski</span><span class="presenter-role" style="text-align: center;">3D Printed copper Flower Lamp, Robot clothes</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.matsumotoanna.com/" target="_blank" rel="noopener"><span class="presenter-name">Anna Matsumoto</span><span class="presenter-role">Human EEg Puppets, 3D Printed Miura-ori Fabric</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://jaredteiger.wixsite.com/my-site" target="_blank" rel="noopener"><span class="presenter-name">Jared Teiger</span><span class="presenter-role">Milk Frother</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://kevincannon.rocks/" target="_blank" rel="noopener"><span class="presenter-name">Kevin Cannon</span><span class="presenter-role">Basalt ROck Fabric, Regolith Bricks</span><span class="presenter-arrow">↗</span></a></li>
+        <li><a href="https://www.sophiaqin.art/" target="_blank" rel="noopener"><span class="presenter-name">Sophia Qin</span><span class="presenter-role">Stained Glass Windows</span><span class="presenter-arrow">↗</span></a></li>
       </ul>
     </div>
 
@@ -1319,6 +1365,440 @@
       var pulses = document.querySelectorAll('.tri-pulse');
       pulses.forEach(function(el) { el.classList.add('loaded'); });
     });
+  </script>
+
+  <script>
+    /* ── VINE + DOBSONFLY ANIMATION for v.4 placeholder ── */
+    (function() {
+      var canvas = document.getElementById('vineCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var container = canvas.parentElement;
+
+      function resize() {
+        var rect = container.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      var W = function() { return canvas.width; };
+      var H = function() { return canvas.height; };
+      var rand = function(a, b) { return a + Math.random() * (b - a); };
+      var randInt = function(a, b) { return Math.floor(rand(a, b)); };
+
+      /* Light pastel green for roots */
+      var ROOT_CLR = { r: 160, g: 220, b: 160 };
+
+      /* Track elapsed time for density acceleration */
+      var startTime = Date.now();
+      function elapsed() { return (Date.now() - startTime) / 1000; }
+
+      /* ── ROOT SEGMENTS ── */
+      var vineSegs = [];
+
+      function spawnVine(x, y, angle, depth) {
+        if (depth <= 0) return;
+
+        var centerX = W() * 0.5;
+        var centerY = H() * 0.5;
+        var ta = Math.atan2(centerY - y, centerX - x);
+        /* Stronger inward pull over time */
+        var timeFactor = Math.min(elapsed() / 60, 1);
+        var pull = (depth > 4 ? 0.35 : 0.15) + timeFactor * 0.25;
+        var useAngle = angle * (1 - pull) + ta * pull;
+
+        var wobbleAmp = rand(0.25, 0.55);
+        useAngle += Math.sin(Date.now() * 0.003 + x * 0.015 + y * 0.015) * wobbleAmp;
+        useAngle += Math.sin(Date.now() * 0.0018 + x * 0.025) * wobbleAmp * 0.3;
+
+        var baseLen = rand(5, 45) * (depth / 6);
+        var x2 = x + Math.cos(useAngle) * baseLen;
+        var y2 = y + Math.sin(useAngle) * baseLen;
+
+        x2 = Math.max(-5, Math.min(W() + 5, x2));
+        y2 = Math.max(-5, Math.min(H() + 5, y2));
+
+        var maxA = rand(0.15, 0.55) * (depth / 6);
+        var mx = (x + x2) * 0.5;
+        var my = (y + y2) * 0.5;
+        var segLen = Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
+        var perpX = -(y2 - y) / (segLen || 1);
+        var perpY = (x2 - x) / (segLen || 1);
+        var curvature = rand(-0.35, 0.35) * segLen;
+        var cpx = mx + perpX * curvature;
+        var cpy = my + perpY * curvature;
+
+        var seg = { x1: x, y1: y, x2: x2, y2: y2, cpx: cpx, cpy: cpy, alpha: 0, maxAlpha: maxA, grow: 0, done: false };
+        vineSegs.push(seg);
+
+        var delay = rand(50, 600);
+        setTimeout(function() {
+          var branches = randInt(1, depth > 3 ? 4 : 2);
+          for (var i = 0; i < branches; i++) {
+            var spread = rand(0.2, 1.0) * (Math.random() < 0.5 ? 1 : -1);
+            (function(ii) {
+              setTimeout(function() {
+                spawnVine(x2, y2, useAngle + spread, depth - 1);
+                /* Spawn trace lines at branch points */
+                if (Math.random() < 0.25) {
+                  spawnTraceLine(x2, y2, useAngle + spread + rand(-0.5, 0.5));
+                }
+              }, ii * rand(20, 200));
+            })(i);
+          }
+        }, delay);
+      }
+
+      function seedVines() {
+        var origins = 14;
+        for (var i = 0; i < origins; i++) {
+          var sx, sy, angle;
+          var edge = i % 4;
+          if (edge === 0) { sx = 0; sy = rand(0.1, 0.9) * H(); angle = rand(-0.4, 0.4); }
+          else if (edge === 1) { sx = W(); sy = rand(0.1, 0.9) * H(); angle = rand(Math.PI * 0.8, Math.PI * 1.2); }
+          else if (edge === 2) { sx = rand(0.1, 0.9) * W(); sy = 0; angle = rand(Math.PI * 0.25, Math.PI * 0.75); }
+          else { sx = rand(0.1, 0.9) * W(); sy = H(); angle = rand(-Math.PI * 0.75, -Math.PI * 0.25); }
+          var baseDelay = i * 200 + rand(0, 150);
+          (function(ssx, ssy, aangle) {
+            setTimeout(function() { spawnVine(ssx, ssy, aangle, 7); }, baseDelay);
+          })(sx, sy, angle);
+        }
+      }
+
+      /* ── EDGE TRACE LINE GROWTHS at varying intervals ── */
+      function spawnEdgeTraceLines() {
+        var edgeCount = randInt(1, 4);
+        for (var i = 0; i < edgeCount; i++) {
+          var ex, ey, ea;
+          var edge = randInt(0, 4);
+          if (edge === 0)      { ex = 0;    ey = rand(0, H()); ea = rand(-0.5, 0.5); }
+          else if (edge === 1) { ex = W();   ey = rand(0, H()); ea = rand(Math.PI - 0.5, Math.PI + 0.5); }
+          else if (edge === 2) { ex = rand(0, W()); ey = 0;    ea = rand(Math.PI * 0.25, Math.PI * 0.75); }
+          else                 { ex = rand(0, W()); ey = H();   ea = rand(-Math.PI * 0.75, -Math.PI * 0.25); }
+          spawnTraceLine(ex, ey, ea);
+        }
+        var nextInterval = rand(400, 2200);
+        setTimeout(spawnEdgeTraceLines, nextInterval);
+      }
+
+      /* Continuous root growth — accelerates over time */
+      function vineGrowth() {
+        /* Max segments grows with time: starts 600, up to 3000 over 5 minutes */
+        var maxSegs = 600 + Math.min(elapsed() / 300, 1) * 2400;
+        /* Spawn interval decreases over time: starts 800ms, down to 150ms */
+        var spawnInterval = Math.max(150, 800 - elapsed() * 2);
+        /* Number of new roots per tick increases over time */
+        var batchSize = 1 + Math.floor(Math.min(elapsed() / 30, 4));
+
+        if (vineSegs.length < maxSegs) {
+          for (var b = 0; b < batchSize; b++) {
+            var edge = randInt(0, 4);
+            var sx, sy, angle;
+            if (edge === 0) { sx = 0; sy = rand(0, 1) * H(); angle = rand(-0.3, 0.3); }
+            else if (edge === 1) { sx = W(); sy = rand(0, 1) * H(); angle = rand(Math.PI * 0.85, Math.PI * 1.15); }
+            else if (edge === 2) { sx = rand(0, 1) * W(); sy = 0; angle = rand(Math.PI * 0.3, Math.PI * 0.7); }
+            else { sx = rand(0, 1) * W(); sy = H(); angle = rand(-Math.PI * 0.7, -Math.PI * 0.3); }
+            spawnVine(sx, sy, angle, randInt(3, 7));
+          }
+
+          var doneSegs = vineSegs.filter(function(s) { return s.done; });
+          if (doneSegs.length > 0 && Math.random() < 0.6) {
+            var parent = doneSegs[randInt(0, doneSegs.length)];
+            var ba = Math.atan2(parent.y2 - parent.y1, parent.x2 - parent.x1);
+            spawnVine(parent.x2, parent.y2, ba + rand(-0.8, 0.8), randInt(2, 5));
+          }
+        }
+        if (vineSegs.length > maxSegs + 400) vineSegs.splice(0, 300);
+        setTimeout(vineGrowth, spawnInterval);
+      }
+
+      /* ── DOBSONFLY INSECTS ── */
+      var insects = [];
+      var NUM_INSECTS = 0;
+
+      function createInsect() {
+        return {
+          x: rand(10, W() - 10),
+          y: rand(10, H() - 10),
+          vx: 0,
+          vy: 0,
+          size: rand(3, 5.5),
+          angle: rand(0, Math.PI * 2),
+          turnSpeed: rand(0.008, 0.025),
+          speed: rand(0.12, 0.35),
+          wingPhase: rand(0, Math.PI * 2),
+          wingSpeed: rand(0.06, 0.12),
+          alpha: rand(0.25, 0.5),
+          driftPhase: rand(0, Math.PI * 2)
+        };
+      }
+
+      for (var i = 0; i < NUM_INSECTS; i++) {
+        insects.push(createInsect());
+      }
+
+      function updateInsect(bug) {
+        /* Slow lazy drifting flight */
+        bug.driftPhase += 0.003;
+        bug.angle += Math.sin(bug.driftPhase + bug.x * 0.005) * bug.turnSpeed;
+        if (Math.random() < 0.008) bug.angle += rand(-0.3, 0.3);
+
+        bug.vx = Math.cos(bug.angle) * bug.speed;
+        bug.vy = Math.sin(bug.angle) * bug.speed;
+        /* Add gentle bobbing */
+        bug.vy += Math.sin(Date.now() * 0.0015 + bug.driftPhase) * 0.06;
+        bug.x += bug.vx;
+        bug.y += bug.vy;
+        bug.wingPhase += bug.wingSpeed;
+
+        if (bug.x < 3) { bug.x = 3; bug.angle = rand(-0.4, 0.4); }
+        if (bug.x > W() - 3) { bug.x = W() - 3; bug.angle = rand(Math.PI * 0.8, Math.PI * 1.2); }
+        if (bug.y < 3) { bug.y = 3; bug.angle = rand(Math.PI * 0.2, Math.PI * 0.8); }
+        if (bug.y > H() - 3) { bug.y = H() - 3; bug.angle = rand(-Math.PI * 0.8, -Math.PI * 0.2); }
+      }
+
+      function drawInsect(bug) {
+        var r = ROOT_CLR.r, g = ROOT_CLR.g, b = ROOT_CLR.b;
+        ctx.save();
+        ctx.translate(bug.x, bug.y);
+        ctx.rotate(bug.angle);
+
+        var s = bug.size;
+
+        /* Long segmented body (dobsonfly-like) */
+        ctx.beginPath();
+        ctx.ellipse(0, 0, s * 1.8, s * 0.3, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + bug.alpha + ")";
+        ctx.fill();
+
+        /* Head */
+        ctx.beginPath();
+        ctx.ellipse(s * 1.6, 0, s * 0.4, s * 0.35, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (bug.alpha * 0.8) + ")";
+        ctx.fill();
+
+        /* Mandibles (long pincers) */
+        ctx.beginPath();
+        ctx.moveTo(s * 1.9, -s * 0.1);
+        ctx.quadraticCurveTo(s * 2.8, -s * 0.5, s * 3.2, -s * 0.2);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (bug.alpha * 0.6) + ")";
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(s * 1.9, s * 0.1);
+        ctx.quadraticCurveTo(s * 2.8, s * 0.5, s * 3.2, s * 0.2);
+        ctx.stroke();
+
+        /* Large veined wings — slow flutter */
+        var wingSpread = Math.sin(bug.wingPhase) * 0.3 + 0.9;
+        var wAlpha = bug.alpha * 0.18;
+
+        /* Upper wings (long, oval, translucent) */
+        ctx.beginPath();
+        ctx.ellipse(-s * 0.2, -s * wingSpread * 1.2, s * 2.0, s * 0.7, -0.15, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + wAlpha + ")";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (wAlpha * 1.5) + ")";
+        ctx.lineWidth = 0.3;
+        ctx.stroke();
+
+        /* Lower wings */
+        ctx.beginPath();
+        ctx.ellipse(-s * 0.2, s * wingSpread * 1.2, s * 2.0, s * 0.7, 0.15, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + wAlpha + ")";
+        ctx.fill();
+        ctx.stroke();
+
+        /* Wing vein lines */
+        ctx.beginPath();
+        ctx.moveTo(s * 0.3, -s * wingSpread * 0.6);
+        ctx.lineTo(-s * 1.8, -s * wingSpread * 1.0);
+        ctx.moveTo(s * 0.3, -s * wingSpread * 0.3);
+        ctx.lineTo(-s * 1.5, -s * wingSpread * 1.2);
+        ctx.moveTo(s * 0.3, s * wingSpread * 0.6);
+        ctx.lineTo(-s * 1.8, s * wingSpread * 1.0);
+        ctx.moveTo(s * 0.3, s * wingSpread * 0.3);
+        ctx.lineTo(-s * 1.5, s * wingSpread * 1.2);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (wAlpha * 0.8) + ")";
+        ctx.lineWidth = 0.25;
+        ctx.stroke();
+
+        /* Long antennae */
+        ctx.beginPath();
+        ctx.moveTo(s * 1.8, -s * 0.15);
+        ctx.quadraticCurveTo(s * 2.5, -s * 1.2, s * 3.0, -s * 1.8);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (bug.alpha * 0.4) + ")";
+        ctx.lineWidth = 0.3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(s * 1.8, s * 0.15);
+        ctx.quadraticCurveTo(s * 2.5, s * 1.2, s * 3.0, s * 1.8);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      /* ── TRACE LINES (growing alongside vines) ── */
+      var traceLines = [];
+
+      function spawnTraceLine(x, y, angle) {
+        var len = rand(30, 120);
+        var speed = rand(0.004, 0.02);
+        var width = rand(0.3, 1.2);
+        var maxAlpha = rand(0.08, 0.25);
+        var wobble = rand(0.1, 0.4);
+        var x2 = x + Math.cos(angle) * len;
+        var y2 = y + Math.sin(angle) * len;
+        var mx = (x + x2) * 0.5;
+        var my = (y + y2) * 0.5;
+        var perpX = -(y2 - y) / (len || 1);
+        var perpY = (x2 - x) / (len || 1);
+        var curv = rand(-0.3, 0.3) * len * wobble;
+        traceLines.push({
+          x1: x, y1: y, x2: x2, y2: y2,
+          cpx: mx + perpX * curv, cpy: my + perpY * curv,
+          grow: 0, alpha: 0, maxAlpha: maxAlpha,
+          speed: speed, width: width,
+          dash: [rand(2, 6), rand(3, 8)]
+        });
+      }
+
+      /* ── DRAW ROOT SEGMENT ── */
+      var GROW_SPEED = 0.018;
+      var FADE_SPEED = 0.022;
+
+      function drawVineSeg(seg) {
+        /* Assign per-segment random variation for width, grow speed, fade speed */
+        if (seg._spd === undefined) seg._spd = GROW_SPEED * (0.3 + Math.random() * 1.4);
+        if (seg._fin === undefined) seg._fin = FADE_SPEED * (0.4 + Math.random() * 1.2);
+        if (seg._width === undefined) seg._width = rand(0.4, 3.5);
+        if (seg._glowWidth === undefined) seg._glowWidth = seg._width + rand(1.0, 4.0);
+        if (seg._delay === undefined) seg._delay = Math.floor(rand(0, 30));
+        if (seg._tick === undefined) seg._tick = 0;
+
+        /* Staggered start delay for more realistic look */
+        seg._tick++;
+        if (seg._tick < seg._delay) return;
+
+        if (seg.grow < 1) seg.grow = Math.min(1, seg.grow + seg._spd);
+        else {
+          if (!seg.done) {
+            seg.done = true;
+            /* Spawn trace lines alongside completed vine segments */
+            if (Math.random() < 0.35) {
+              var ta = Math.atan2(seg.y2 - seg.y1, seg.x2 - seg.x1);
+              spawnTraceLine(seg.x2, seg.y2, ta + rand(-0.6, 0.6));
+            }
+          }
+        }
+        if (seg.alpha < seg.maxAlpha) seg.alpha = Math.min(seg.maxAlpha, seg.alpha + seg._fin);
+
+        var t = seg.grow;
+        var t1 = 1 - t;
+        var tx = t1 * t1 * seg.x1 + 2 * t1 * t * seg.cpx + t * t * seg.x2;
+        var ty = t1 * t1 * seg.y1 + 2 * t1 * t * seg.cpy + t * t * seg.y2;
+
+        var r = ROOT_CLR.r, g = ROOT_CLR.g, b = ROOT_CLR.b;
+
+        var cp1x = seg.x1 + (seg.cpx - seg.x1) * t;
+        var cp1y = seg.y1 + (seg.cpy - seg.y1) * t;
+
+        /* glow layer */
+        ctx.beginPath();
+        ctx.moveTo(seg.x1, seg.y1);
+        ctx.quadraticCurveTo(cp1x, cp1y, tx, ty);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (seg.alpha * 0.22) + ")";
+        ctx.lineWidth = seg._glowWidth;
+        ctx.stroke();
+
+        /* core */
+        ctx.beginPath();
+        ctx.moveTo(seg.x1, seg.y1);
+        ctx.quadraticCurveTo(cp1x, cp1y, tx, ty);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + seg.alpha + ")";
+        ctx.lineWidth = seg._width;
+        ctx.stroke();
+      }
+
+      function drawTraceLine(trace) {
+        trace.grow = Math.min(1, trace.grow + trace.speed);
+        if (trace.alpha < trace.maxAlpha) trace.alpha = Math.min(trace.maxAlpha, trace.alpha + trace.speed * 0.8);
+
+        var t = trace.grow;
+        var t1 = 1 - t;
+        var tx = t1 * t1 * trace.x1 + 2 * t1 * t * trace.cpx + t * t * trace.x2;
+        var ty = t1 * t1 * trace.y1 + 2 * t1 * t * trace.cpy + t * t * trace.y2;
+
+        var cp1x = trace.x1 + (trace.cpx - trace.x1) * t;
+        var cp1y = trace.y1 + (trace.cpy - trace.y1) * t;
+
+        var r = ROOT_CLR.r, g = ROOT_CLR.g, b = ROOT_CLR.b;
+
+        ctx.beginPath();
+        ctx.moveTo(trace.x1, trace.y1);
+        ctx.quadraticCurveTo(cp1x, cp1y, tx, ty);
+        ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + trace.alpha + ")";
+        ctx.lineWidth = trace.width;
+        ctx.setLineDash(trace.dash);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      /* ── DRAW CENTERED "MAY" / "14TH" TEXT (stacked, green like vines) ── */
+      function drawDateText() {
+        ctx.save();
+        var fontSize = Math.min(W() * 0.18, 72);
+        ctx.font = "700 " + fontSize + "px 'Orbitron', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        var r = ROOT_CLR.r, g = ROOT_CLR.g, b = ROOT_CLR.b;
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ",1)";
+        ctx.letterSpacing = "0.05em";
+        var gap = fontSize * 0.55;
+        ctx.fillText("MAY", W() * 0.5, H() * 0.5 - gap);
+        ctx.fillText("14TH", W() * 0.5, H() * 0.5 + gap);
+        ctx.restore();
+      }
+
+      /* ── ANIMATION LOOP ── */
+      function loop() {
+        ctx.clearRect(0, 0, W(), H());
+
+        for (var i = 0; i < vineSegs.length; i++) {
+          drawVineSeg(vineSegs[i]);
+        }
+
+        for (var j = 0; j < traceLines.length; j++) {
+          drawTraceLine(traceLines[j]);
+        }
+
+        drawDateText();
+
+        requestAnimationFrame(loop);
+      }
+
+      /* ── IntersectionObserver: start only when visible ── */
+      var started = false;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !started) {
+            started = true;
+            startTime = Date.now();
+            resize();
+            seedVines();
+            loop();
+            setTimeout(vineGrowth, 1500);
+            setTimeout(spawnEdgeTraceLines, 800);
+            observer.unobserve(container);
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(container);
+    })();
   </script>
 
 </body>
